@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	--text-primary: #e8e8e8;
+	--text-secondary: #b19f9e;
+	--bg-primary: #19181a;
+	--highlight-green: #479761;
+	--highlight-yellow: #cebc81;
+	--highlight-rose: #a16e83;
+}
+
+body,
+html {
+	height: 100%;
+}
+
+body {
+	@apply font-sans;
+	@apply text-primary;
+	@apply bg-primary;
+}
+
+a {
+	cursor: pointer;
+}
+
+h1 {
+	@apply text-3xl;
+	font-weight: bold;
+}
+h2 {
+	font-size: x-large;
+}
+
+select {
+	color: black;
+}

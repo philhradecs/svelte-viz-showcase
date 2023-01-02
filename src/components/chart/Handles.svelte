@@ -1,0 +1,21 @@
+<script lang="ts">
+	import CheckboxControl from '$components/controls/Checkbox.svelte';
+	import SelectControl from '$components/controls/Select.svelte';
+	import SliderControl from '$components/controls/Slider.svelte';
+	import type { ComponentType } from 'svelte';
+	import type { Control, ControlType } from '$components/controls/types';
+
+	const controlTypeMap: Record<ControlType, ComponentType> = {
+		checkbox: CheckboxControl,
+		select: SelectControl,
+		slider: SliderControl
+	};
+
+	export let controls: Control[] = [];
+</script>
+
+<div class="flex flex-col gap-2">
+	{#each controls as props (props.label)}
+		<svelte:component this={controlTypeMap[props.type]} {...props} />
+	{/each}
+</div>
