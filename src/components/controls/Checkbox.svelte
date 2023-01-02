@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { createId } from '@paralleldrive/cuid2';
 	import type { CheckboxControlProps } from './types';
-	type $$Props = CheckboxControlProps;
+
+	export let config: CheckboxControlProps;
+	const { writable, label } = config;
+
 	let id = createId();
-	const { writable, label } = $$props as $$Props;
 </script>
 
 <div>

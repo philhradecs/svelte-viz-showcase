@@ -2,13 +2,16 @@
 	import { createId } from '@paralleldrive/cuid2';
 	import throttle from 'lodash.throttle';
 	import type { SliderControlProps } from './types';
-	type $$Props = SliderControlProps;
-	let id = createId();
-	const { label, writable, throttle: throttleMs, type, ...props } = $$props as SliderControlProps;
+
+	export let config: SliderControlProps;
+	const { label, writable, throttle: throttleMs, type, ...rest } = config;
+
 	const handleChange = throttle(
 		(event: Event) => writable.set(+(event.target as HTMLInputElement).value),
 		throttleMs
 	);
+
+	let id = createId();
 	let value = $writable;
 </script>
 
@@ -19,7 +22,7 @@
 	</div>
 	<input
 		type="range"
-		{...props}
+		{...rest}
 		class="min-w-[60px] block"
 		{id}
 		bind:value

@@ -1,21 +1,9 @@
 <script lang="ts">
-	import {
-		max,
-		extent,
-		map,
-		range,
-		InternSet,
-		group,
-		min,
-		groupSort,
-		groups,
-		InternMap
-	} from 'd3-array';
+	import { max, extent, map, range, InternSet, group, min, groupSort } from 'd3-array';
 	import 'd3-transition';
 	import { axisTop } from 'd3-axis';
 	import { scaleLinear, scaleOrdinal, scalePoint } from 'd3-scale';
 	import { schemeSpectral } from 'd3-scale-chromatic';
-	import { easeCubicIn } from 'd3-ease';
 	import drawLegend from '../utility/legend';
 
 	import { order } from '$visualizations/dot-plot/store';
@@ -23,9 +11,9 @@
 	type DotPlotData = { population: number; state: string; age: string }[];
 
 	import type { ChartProps } from '$components/chart/Chart.svelte';
-	type $$Props = ChartProps<DotPlotData>;
 
-	export let { data: unsortedData, width, height, root, svg, ml } = $$props as $$Props;
+	export let config: ChartProps<DotPlotData>;
+	const { data: unsortedData, width, height, root, svg, ml } = config;
 
 	const unsortedZDomain = new InternSet(map(unsortedData, (d) => d.age));
 	const colors = schemeSpectral[unsortedZDomain.size];
@@ -48,7 +36,7 @@
 		const zDomain = new InternSet(Z);
 
 		const I = range(X.length).filter((i) => yDomain.has(Y[i]) && zDomain.has(Z[i]));
-		const indexGroups = groups(I, (i) => Y[i]);
+		const indexGroups = group(I, (i) => Y[i]);
 
 		drawLegend(svg, colorScale, {
 			title: 'Age and so on',

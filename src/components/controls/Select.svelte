@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { createId } from '@paralleldrive/cuid2';
 	import type { SelectControlProps } from './types';
-	type $$Props = SelectControlProps;
+
+	export let config: SelectControlProps;
+	const { writable, label, options } = config;
 	let id = createId();
-	const { writable, label, options } = $$props as $$Props;
 </script>
 
 <div>

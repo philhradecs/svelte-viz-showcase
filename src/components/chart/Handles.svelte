@@ -15,7 +15,7 @@
 </script>
 
 <div class="flex flex-col gap-2">
-	{#each controls as props (props.label)}
-		<svelte:component this={controlTypeMap[props.type]} {...props} />
+	{#each controls as config (config.label)}
+		<svelte:component this={controlTypeMap[config.type]} {config} />
 	{/each}
 </div>

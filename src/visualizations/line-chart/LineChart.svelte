@@ -11,8 +11,9 @@
 	// export const colorAtom = atom('red');
 
 	type LineChartData = { x: number; y: number }[];
-	import type { ChartBaseProps } from '$components/chart/Chart.svelte';
-	type $$Props = ChartBaseProps;
+	import type { ChartProps } from '$components/chart/Chart.svelte';
+
+	export let config: ChartProps<any>;
 
 	// export const LineChart = memo(function LineChart({
 	// 	root,

@@ -57,7 +57,7 @@
 
 	$: svgSelection = svg ? select<SVGSVGElement, any>(svg) : undefined;
 	$: chartSelection = chart ? select<SVGGElement, any>(chart) : undefined;
-	$: slotProps =
+	$: config =
 		svgSelection && chartSelection
 			? {
 					mt,
@@ -85,8 +85,8 @@
 			class="absolute inset-0"
 		>
 			<g bind:this={chart} transform={`translate(${ml}, ${mt})`}>
-				{#if slotProps}
-					<svelte:component this={component} {...slotProps} />
+				{#if config}
+					<svelte:component this={component} {config} />
 				{/if}
 			</g>
 		</svg>
