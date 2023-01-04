@@ -7,8 +7,8 @@
 		ml: number;
 	};
 	export type ChartBaseProps = {
-		svg: Selection<SVGSVGElement, unknown, any, undefined>;
-		root: Selection<SVGGElement, unknown, any, undefined>;
+		svg: Selection<SVGSVGElement, any, any, any>;
+		root: Selection<SVGGElement, any, any, any>;
 		width: number;
 		height: number;
 	} & Margin;
@@ -18,36 +18,38 @@
 
 <script lang="ts">
 	import { select } from 'd3-selection';
-	import type { ComponentType } from 'svelte';
+	import type { ComponentType, SvelteComponentTyped } from 'svelte';
 
-	import ContourChart from '$visualizations/contour/ContourChart.svelte';
-	import LineChart from '$visualizations/line-chart/LineChart.svelte';
-	import DotPlotChart from '$visualizations/dot-plot/DotPlotChart.svelte';
+	export let mt: number = 0;
+	export let mr: number = 0;
+	export let mb: number = 0;
+	export let ml: number = 0;
 
-	export let mt: number = 20;
-	export let mr: number = 50;
-	export let mb: number = 30;
-	export let ml: number = 50;
-	export let data: any;
+	type T = $$Generic<ComponentType<SvelteComponentTyped<{ config: ChartProps<any> }>>>;
+	export let chart: T;
 
-	export let chartType: 'contour' | 'line' | 'dotPlot' = 'line';
+	type ChartData = T extends ComponentType<SvelteComponentTyped<infer Props>>
+		? Props['config']['data']
+		: never;
 
-	let charts = {
-		line: LineChart,
-		contour: ContourChart,
-		dotPlot: DotPlotChart
-	} satisfies Record<typeof chartType, ComponentType>;
+	export let data: ChartData;
 
-	let component = charts[chartType];
+	// let charts = {
+	// 	line: LineChart,
+	// 	contour: ContourChart,
+	// 	dotPlot: DotPlotChart
+	// } satisfies Record<typeof chartType, ComponentType>;
 
-	let svg: SVGSVGElement | undefined = undefined;
-	let chart: SVGGElement | undefined = undefined;
+	// let component = charts[chartType];
+
+	let svgEl: SVGSVGElement | undefined = undefined;
+	let chartEl: SVGGElement | undefined = undefined;
 	let clientWidth = 0;
 	let clientHeight = 0;
 
 	let debounced = { clientWidth, clientHeight };
 
-	let timeoutHandle = '';
+	let timeoutHandle: any = '';
 	$: {
 		clearTimeout(timeoutHandle);
 		timeoutHandle = setTimeout(() => {
@@ -55,8 +57,8 @@
 		}, 200);
 	}
 
-	$: svgSelection = svg ? select<SVGSVGElement, any>(svg) : undefined;
-	$: chartSelection = chart ? select<SVGGElement, any>(chart) : undefined;
+	$: svgSelection = svgEl ? select<SVGSVGElement, any>(svgEl) : undefined;
+	$: chartSelection = chartEl ? select<SVGGElement, any>(chartEl) : undefined;
 	$: config =
 		svgSelection && chartSelection
 			? {
@@ -76,17 +78,16 @@
 <div bind:clientWidth bind:clientHeight class="relative h-full max-w-full overflow-hidden">
 	{#if debounced.clientWidth > 0 && debounced.clientHeight > 0}
 		<svg
-			bind:this={svg}
+			bind:this={svgEl}
 			width={debounced.clientWidth}
-			height={clientHeight}
-			viewBox={`0 0 ${debounced.clientWidth} ${debounced.clientHeight}`}
+			height={debounced.clientHeight}
 			stroke-linejoin="round"
 			fill="none"
 			class="absolute inset-0"
 		>
-			<g bind:this={chart} transform={`translate(${ml}, ${mt})`}>
+			<g bind:this={chartEl} transform={`translate(${ml}, ${mt})`}>
 				{#if config}
-					<svelte:component this={component} {config} />
+					<svelte:component this={chart} {config} />
 				{/if}
 			</g>
 		</svg>

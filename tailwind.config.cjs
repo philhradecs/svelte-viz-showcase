@@ -11,6 +11,7 @@ module.exports = {
         "highlight-green": 'var(--highlight-green)',
         "highlight-yellow": 'var(--highlight-yellow)',
         "highlight-rose": 'var(--highlight-rose)',
+        'bg-primary': 'var(--bg-primary)'
       },
       fontFamily: {
         "mono": ["Space Mono", 'monospace']

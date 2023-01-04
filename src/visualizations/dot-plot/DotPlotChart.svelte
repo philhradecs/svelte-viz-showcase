@@ -6,43 +6,67 @@
 	import { schemeSpectral } from 'd3-scale-chromatic';
 	import drawLegend from '../utility/legend';
 
-	import { order } from '$visualizations/dot-plot/store';
+	import {
+		order,
+		transitionDelay,
+		transitionDuration,
+		highlightColor
+	} from '$visualizations/dot-plot/store';
 
 	type DotPlotData = { population: number; state: string; age: string }[];
 
 	import type { ChartProps } from '$components/chart/Chart.svelte';
+	import { select } from 'd3-selection';
+	import { page } from '$app/stores';
 
 	export let config: ChartProps<DotPlotData>;
-	const { data: unsortedData, width, height, root, svg, ml } = config;
 
+	const { data: unsortedData, root, svg, ml } = config;
 	const unsortedZDomain = new InternSet(map(unsortedData, (d) => d.age));
 	const colors = schemeSpectral[unsortedZDomain.size];
 	const colorScale = scaleOrdinal(unsortedZDomain, colors);
 
+	const orderOptions = $page.data.orderOptions as { label: string; value: string }[];
+	let trigger = false;
 	$: {
-		const data = groupSort(
-			unsortedData,
-			(D) =>
-				$order === 'state' ? D[0].state : -(D.find((d) => d.age === $order)?.population || 0),
-			(d) => d
-		);
+		if (trigger && orderOptions) {
+			$highlightColor;
+			$transitionDelay;
+			$transitionDuration;
+			order.update((currentValue) => {
+				const currentOptionIdx = orderOptions.findIndex((d) => d.value === currentValue);
+				const nextOptionIdx = (currentOptionIdx + 1) % (orderOptions.length - 1);
+				return orderOptions[nextOptionIdx].value;
+			});
+		}
+		trigger = true;
+	}
 
-		const X = map(data, (d) => d.population);
-		const Y = map(data, (d) => d.state);
-		const Z = map(data, (d) => d.age);
+	$: data = groupSort(
+		unsortedData,
+		(D) => ($order === 'state' ? D[0].state : -(D.find((d) => d.age === $order)?.population || 0)),
+		(d) => d
+	);
 
-		const xDomain = extent(X) as any;
-		const yDomain = new InternSet(Y);
-		const zDomain = new InternSet(Z);
+	$: X = map(data, (d) => d.population);
+	$: Y = map(data, (d) => d.state);
+	$: Z = map(data, (d) => d.age);
+	$: xDomain = extent(X) as any;
+	$: yDomain = new InternSet(Y);
+	$: zDomain = new InternSet(Z);
+	$: I = range(X.length).filter((i) => yDomain.has(Y[i]) && zDomain.has(Z[i]));
+	$: indexGroups = group(I, (i) => Y[i]);
 
-		const I = range(X.length).filter((i) => yDomain.has(Y[i]) && zDomain.has(Z[i]));
-		const indexGroups = group(I, (i) => Y[i]);
+	// let yScalePrev: ScalePoint<string> | null = null;
 
+	$: {
+		const { width, height } = config;
 		drawLegend(svg, colorScale, {
 			title: 'Age and so on',
 			marginLeft: ml,
-			width: width,
+			width: width + ml,
 			onClick: order.set,
+			selected: $order,
 			height: 55
 		});
 
@@ -81,21 +105,54 @@
 			.join('g')
 			.classed('group', true);
 
-		g.transition()
-			.duration(400)
-			.attr('transform', ([y]) => `translate(0,${yScale(y)})`);
+		g
+			// .sort(([stateA], [stateB]) =>
+			// 	yScalePrev ? ascending(yScalePrev(stateA), yScalePrev(stateB)) : 0
+			// )
+			.transition()
+			.attr('opacity', 0.2)
+			.each(([y], i, nodes) => {
+				select(nodes[i])
+					.call(async (el) => {
+						el.transition()
+							.duration($transitionDuration * 0.1)
+							.delay(i * $transitionDelay)
+							.attr('opacity', 1)
+							.call((t) =>
+								t
+									.selectAll('line')
+									.transition()
+									.duration($transitionDuration * 0.1)
+									.style('stroke', $highlightColor)
+							)
+							.transition()
+							.delay($transitionDuration * 0.8)
+							.duration($transitionDuration * 0.3)
+							.attr('opacity', 0.6)
+							.call((t) =>
+								t
+									.selectAll('line')
+									.transition()
+									.duration($transitionDuration * 0.1)
+									.style('stroke', null)
+							);
+					})
+					.transition('transform')
+					.duration($transitionDuration)
+					.delay(i * $transitionDelay + $transitionDuration * 0.2)
+					.attr('transform', `translate(0,${yScale(y)})`);
+			})
+			.transition()
+			.delay(indexGroups.size * $transitionDelay + $transitionDuration / 3)
+			.attr('opacity', 1);
 
 		g.selectAll('line')
 			.data((d) => [d])
 			.join('line')
-			.classed('stroke-cyan-700', true)
+			.classed('stroke-cyan-600', true)
 			.attr('stroke-width', 1)
 			.attr('stroke-linecap', 'round')
 			.attr('stroke-opacity', 0.9)
-			// .attr('x1', ([, I]) => xScale(X[I.find((i) => Z[i] === order) || 0]))
-			// .attr('x2', ([, I]) => xScale(X[I.find((i) => Z[i] === order) || 0]))
-			// .transition()
-			// .ease(easeCubicIn)
 			.attr('x1', ([, I]) => xScale(min(I, (i) => X[i]) as any))
 			.attr('x2', ([, I]) => xScale(max(I, (i) => X[i]) as any));
 
@@ -115,5 +172,7 @@
 			.attr('dy', '0.35em')
 			.attr('x', ([, I]) => xScale(min(I, (i) => X[i]) as any) - 6)
 			.text(([y]) => y);
+
+		// yScalePrev = yScale.copy();
 	}
 </script>

@@ -3,6 +3,9 @@
 	import { bandwidth, threshold } from '$visualizations/contour/store';
 	import ChartLayout from '$components/chart/ChartLayout.svelte';
 	import type { PageData } from './$types';
+
+	import ContourChart from '$visualizations/contour/ContourChart.svelte';
+
 	export let data: PageData;
 </script>
 
@@ -27,6 +30,6 @@
 	]}
 >
 	<div class="h-full">
-		<Chart ml={50} mb={40} chartType="contour" {...data} />
+		<Chart ml={55} mb={45} mt={25} chart={ContourChart} data={data.array} />
 	</div>
 </ChartLayout>

@@ -11,9 +11,10 @@
 	import type { ChartProps } from '$components/chart/Chart.svelte';
 
 	export let config: ChartProps<ContourChartData>;
-	export let { data, width, height, root } = config;
 
 	$: {
+		const { data, width, height, root } = config;
+
 		const xDomain = extent(data, (d) => d.x) as any;
 		const yDomain = extent(data, (d) => d.y) as any;
 

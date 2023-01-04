@@ -19,6 +19,7 @@ type LegendOptions = {
 	tickValues?: number[];
 	onHover?: (value: any | undefined) => void;
 	onClick?: (value: any | undefined) => void;
+	selected?: any;
 };
 
 export default function drawLegend(
@@ -37,9 +38,17 @@ export default function drawLegend(
 		tickFormat,
 		tickValues,
 		onHover,
-		onClick
+		onClick,
+		selected
 	}: LegendOptions = {}
 ) {
+	root
+		.selectAll('g.legend')
+		.data([color])
+		.join<SVGGElement>('g')
+		.classed('legend', true)
+		.call(drawInnerLegend);
+
 	function ramp(color: any, n = 256) {
 		const canvas = document.createElement('canvas');
 		canvas.width = n;
@@ -53,13 +62,9 @@ export default function drawLegend(
 		}
 		return canvas;
 	}
-	root
-		.selectAll('g.legend')
-		.data([color])
-		.join((enter) => enter.append<SVGGElement>('g').classed('legend', true).call(drawInnerLegend));
 
-	function drawInnerLegend(g: Selection<SVGGElement, unknown, BaseType, unknown>) {
-		let tickAdjust = (g: Selection<SVGGElement, unknown, BaseType, undefined>): any =>
+	function drawInnerLegend(g: Selection<BaseType, unknown, BaseType, unknown>) {
+		let tickAdjust = (g: Selection<BaseType, unknown, BaseType, undefined>): any =>
 			g.selectAll('.tick line').attr('y1', marginTop + marginBottom - height);
 		let x: any;
 
@@ -69,7 +74,7 @@ export default function drawLegend(
 
 			x = color.copy().rangeRound(quantize(interpolate(marginLeft, width - marginRight), n));
 
-			g.append('image')
+			g.join('image')
 				.attr('x', marginLeft)
 				.attr('y', marginTop)
 				.attr('width', width - marginLeft - marginRight)
@@ -89,7 +94,7 @@ export default function drawLegend(
 				}
 			);
 
-			g.append('image')
+			g.join('image')
 				.attr('x', marginLeft)
 				.attr('y', marginTop)
 				.attr('width', width - marginLeft - marginRight)
@@ -128,7 +133,7 @@ export default function drawLegend(
 				.domain([-1, color.range().length - 1])
 				.rangeRound([marginLeft, width - marginRight]);
 
-			g.append('g')
+			g.join('g')
 				.selectAll('rect')
 				.data(color.range())
 				.join('rect')
@@ -147,9 +152,11 @@ export default function drawLegend(
 			x = scaleBand()
 				.domain(color.domain())
 				.rangeRound([marginLeft, width - marginRight]);
-
 			const rect = g
-				.append('g')
+				.selectAll('g.colorTiles')
+				.data((d) => [d])
+				.join('g')
+				.classed('colorTiles', true)
 				.selectAll('rect')
 				.data(color.domain())
 				.join('rect')
@@ -157,7 +164,9 @@ export default function drawLegend(
 				.attr('y', marginTop)
 				.attr('width', Math.max(0, x.bandwidth() - 1))
 				.attr('height', height - marginTop - marginBottom)
-				.attr('fill', color);
+				.attr('fill', color)
+				.attr('stroke', (d) => (selected && d === selected ? 'white' : null))
+				.attr('stroke-width', 2);
 
 			if (onHover) {
 				rect.on('mouseenter', (_, d) => onHover(d)).style('cursor', 'pointer');
@@ -170,7 +179,10 @@ export default function drawLegend(
 			tickAdjust = () => {};
 		}
 
-		g.append('g')
+		g.selectAll('g.axisBottom')
+			.data((d) => [d])
+			.join('g')
+			.classed('axisBottom', true)
 			.attr('transform', `translate(0,${height - marginBottom})`)
 			.call((el) => {
 				const axis = axisBottom(x)
@@ -182,20 +194,23 @@ export default function drawLegend(
 				if (tickValues) {
 					axis.tickValues(tickValues);
 				}
-				return axis(el);
+				return axis(el as any);
 			})
 			.call(tickAdjust)
 			.call((g) => g.select('.domain').remove())
 			.call((g) =>
 				title
 					? g
-							.append('text')
+							.selectAll('text.axisTitle')
+							.data((d) => [d])
+							.join('text')
+							.classed('axisTitle', true)
 							.attr('x', marginLeft)
 							.attr('y', marginTop + marginBottom - height - 6)
 							.attr('fill', 'currentColor')
 							.attr('text-anchor', 'start')
 							.attr('font-weight', 'bold')
-							.attr('class', 'title')
+							// .attr('class', 'title')
 							.text(title)
 					: undefined
 			);

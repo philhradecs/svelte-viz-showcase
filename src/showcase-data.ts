@@ -1,6 +1,7 @@
 import contourCoverImage from './assets/images/cover-contour.png';
 import globeCoverImage from './assets/images/cover-globe.png';
 import dashboardCoverImage from './assets/images/cover-dashboard.png';
+import dotPlotCoverImage from './assets/images/cover-dot-plot.png';
 
 const data = [
 	{
@@ -18,7 +19,7 @@ const data = [
 	{
 		title: 'Dot Plot',
 		link: 'showcase/dot-plot',
-		imgSrc: ''
+		imgSrc: dotPlotCoverImage
 	},
 	{
 		title: 'Zoomable Treemap',
