@@ -30,7 +30,8 @@ const data = [
 	{
 		title: 'Data Story',
 		link: 'showcase/data-story',
-		imgSrc: ''
+		imgSrc: '',
+		color: 'dark'
 	}
 
 	// {

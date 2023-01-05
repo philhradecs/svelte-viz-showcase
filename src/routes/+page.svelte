@@ -18,8 +18,8 @@
 			</p>
 		</div>
 
-		{#each data as { title, link, imgSrc }, i (title)}
-			<VizTile {title} {link} {imgSrc} color={i === 0 ? 'dark' : 'light'} />
+		{#each data as { title, link, imgSrc, color }, i (title)}
+			<VizTile {title} {link} {imgSrc} {color} />
 		{/each}
 	</div>
 </div>
