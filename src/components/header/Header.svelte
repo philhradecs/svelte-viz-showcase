@@ -20,7 +20,7 @@
 			</div>
 		{/if}
 	</div>
-	<a class="hover:text-highlight-rose">
+	<a href="https://github.com" target="_blank" rel="noreferrer" class="hover:text-highlight-rose">
 		<LogoGithub size={24} />
 	</a>
 </div>
