@@ -62,7 +62,7 @@
 	$: {
 		const { width, height } = config;
 		drawLegend(svg, colorScale, {
-			title: 'Age and so on',
+			title: 'Age (years)',
 			marginLeft: ml,
 			width: width + ml,
 			onClick: order.set,

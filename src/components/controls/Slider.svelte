@@ -16,7 +16,7 @@
 </script>
 
 <div>
-	<div class="flex gap-2 mb-1">
+	<div class="flex gap-2 mb-0.5">
 		<label for={id}>{label}:</label>
 		<div class="text-lg text-cyan-500">{value}</div>
 	</div>
