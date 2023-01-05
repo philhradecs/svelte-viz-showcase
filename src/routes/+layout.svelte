@@ -2,9 +2,10 @@
 	import '../app.css';
 	import { navigating } from '$app/stores';
 	import PageLoading from '$components/PageLoading.svelte';
-	import Header from '$components/Header.svelte';
+	import Header from '$components/header/Header.svelte';
 
 	import { page } from '$app/stores';
+	import { headerContent } from '$components/header/store';
 
 	$: routeId = $page.route.id;
 
@@ -16,17 +17,16 @@
 				.join(' ')
 		: undefined;
 
-	$: headerTitle = !$navigating && chartTitle ? chartTitle : '';
+	$: {
+		routeId;
+		headerContent.set(
+			chartTitle ? { title: chartTitle } : { links: [{ label: 'About', link: 'about' }] }
+		);
+	}
 </script>
 
 <div class="flex flex-col h-full">
-	<Header>
-		{#if headerTitle}
-			<div class="font-mono text-lg">{headerTitle}</div>
-		{:else}
-			<a href="viz">About</a>
-		{/if}
-	</Header>
+	<Header />
 
 	{#if $navigating}
 		<PageLoading />

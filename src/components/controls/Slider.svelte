@@ -16,14 +16,14 @@
 </script>
 
 <div>
-	<div class="flex gap-2 mb-0.5">
+	<div class="flex gap-2 mb-1">
 		<label for={id}>{label}:</label>
-		<div>{value}</div>
+		<div class="text-lg text-cyan-500">{value}</div>
 	</div>
 	<input
 		type="range"
 		{...rest}
-		class="min-w-[60px] block"
+		class="w-full max-w-[160px] block"
 		{id}
 		bind:value
 		on:input={handleChange}

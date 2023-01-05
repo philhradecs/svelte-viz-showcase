@@ -32,29 +32,26 @@
 
 	const { root: chartRoot } = config;
 
-	const treemapData = calculateTreemap(config.data, config.width, config.height);
-
-	const x = scaleLinear().rangeRound([0, config.width]);
-	const y = scaleLinear().rangeRound([0, config.height]);
+	$: treemapData = calculateTreemap(config.data, config.width, config.height);
 	const formatNumber = format(',d');
 
+	$: x = scaleLinear().rangeRound([0, config.width]);
+	$: y = scaleLinear().rangeRound([0, config.height]);
+
 	let treemapLevel: GroupSelection;
-	treemapLevel = chartRoot
+	$: treemapLevel = chartRoot
 		.selectAll('g.group')
 		.data([treemapData])
-		.join((enter) => {
-			return enter
-				.append<BaseType>('g')
-				.classed('group', true)
-				.call((el) => render(el, treemapData, x, y));
-		});
+		.join<BaseType>('g')
+		.classed('group', true)
+		.call((el) => render(el, treemapData, x, y));
 
 	function render(group: GroupSelection, root: HierarchyNode, x: any, y: any) {
 		const node = group
 			.selectAll('g.tile')
 			.data(root.children?.concat(root) || [])
 			.join((enter) => {
-				return enter.append('g').classed('tile', true);
+				return enter.append('g').attr('class', (d) => (d === root ? 'tile header' : 'tile'));
 			});
 
 		node
@@ -86,9 +83,8 @@
 			.classed('fill-white', true)
 			.selectAll('tspan')
 			.data((d) => {
-				return (d === root ? getName(d) : d.data.name)
-					.split(/(?=[A-Z][^A-Z])/g)
-					.concat(formatNumber(d.value || 0));
+				const title = d === root ? getName(d) : d.data.name;
+				return [title, formatNumber(d.value || 0)];
 			})
 			.join('tspan')
 			.attr('x', 8)
@@ -110,25 +106,14 @@
 		x: any,
 		y: any
 	) {
-		if ('duration' in group) {
-			group
-				.selectAll<SVGGElement, HierarchyNode>('g')
-				.attr('transform', (d) => {
-					return d === root ? `translate(0,-50)` : `translate(${x(d.x0)},${y(d.y0)})`;
-				})
-				.select('rect')
-				.attr('width', (d) => (d === root ? config.width : x(d.x1) - x(d.x0)))
-				.attr('height', (d) => (d === root ? 50 : y(d.y1) - y(d.y0)));
-		} else {
-			group
-				.selectAll<SVGGElement, HierarchyNode>('g')
-				.attr('transform', (d) => {
-					return d === root ? `translate(0,-50)` : `translate(${x(d.x0)},${y(d.y0)})`;
-				})
-				.select('rect')
-				.attr('width', (d) => (d === root ? config.width : x(d.x1) - x(d.x0)))
-				.attr('height', (d) => (d === root ? 50 : y(d.y1) - y(d.y0)));
-		}
+		group
+			.selectAll<SVGGElement, HierarchyNode>('g.tile')
+			.attr('transform', (d) => {
+				return d === root ? `translate(0,-50)` : `translate(${x(d.x0)},${y(d.y0)})`;
+			})
+			.select('rect')
+			.attr('width', (d) => (d === root ? config.width : x(d.x1) - x(d.x0)))
+			.attr('height', (d) => (d === root ? 50 : y(d.y1) - y(d.y0)));
 	}
 
 	function zoomin(d: HierarchyRectangularNode<any>) {
@@ -189,6 +174,7 @@
 		const parent = d.parent;
 
 		const group0 = treemapLevel.attr('pointer-events', 'none');
+		group0.select('.tile.header').remove();
 
 		const updatedXScale = x.copy().domain([parent.x0, parent.x1]);
 		const updatedYScale = y.copy().domain([parent.y0, parent.y1]);

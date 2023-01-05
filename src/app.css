@@ -31,9 +31,22 @@ h1 {
 	font-weight: bold;
 }
 h2 {
-	font-size: x-large;
+	@apply text-2xl;
+	font-weight: bold;
+}
+h3 {
+	@apply text-xl;
 }
 
-select {
-	color: black;
+select,
+input {
+	@apply text-cyan-500 text-lg;
+	@apply bg-stone-900;
+	@apply border border-gray-800;
+	@apply px-1 py-1;
+}
+
+label {
+	@apply text-gray-300 text-lg;
+	@apply tracking-wide;
 }

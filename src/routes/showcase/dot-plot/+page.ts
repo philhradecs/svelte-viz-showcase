@@ -2,7 +2,7 @@ import type { PageLoad } from './$types';
 import { csvParse } from 'd3-dsv';
 import dotPlotData from '$assets/datasets/us-distribution-state-age.csv?raw';
 
-const fetchDotPlotData = () => {
+export const _fetchDotPlotData = () => {
 	return csvParse(dotPlotData, ({ population, state, age }) => ({
 		population: typeof population === 'string' ? Number(population) : 0,
 		state: state ?? '',
@@ -11,7 +11,7 @@ const fetchDotPlotData = () => {
 };
 
 export const load: PageLoad = () => {
-	const data = fetchDotPlotData();
+	const data = _fetchDotPlotData();
 	const ageCategories = [...new Set(data.map(({ age }) => age))];
 	const orderOptions = [
 		{ label: 'State', value: 'state' },

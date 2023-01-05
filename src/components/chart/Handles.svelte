@@ -14,7 +14,7 @@
 	export let controls: Control[] = [];
 </script>
 
-<div class="flex flex-col gap-2">
+<div class="flex flex-col gap-4">
 	{#each controls as config (config.label)}
 		<svelte:component this={controlTypeMap[config.type]} {config} />
 	{/each}

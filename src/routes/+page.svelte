@@ -4,7 +4,7 @@
 	import data from '../showcase-data';
 </script>
 
-<div class="mt-10 mb-12 container mx-auto px-5 ">
+<div class="mt-8 mb-8 container mx-auto px-5 ">
 	<div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 		<div class="col-span-full lg:col-span-2 xl:col-span-3 max-w-3xl mr-4 font-mono">
 			<h1 class="mb-2 lg:text-4xl">
