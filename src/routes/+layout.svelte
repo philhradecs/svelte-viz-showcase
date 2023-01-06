@@ -25,14 +25,16 @@
 	}
 </script>
 
-<div class="flex flex-col h-full">
-	<Header />
+<div class="flex flex-col min-h-full">
+	<div class="sticky top-0 left-0 z-10 bg-primary">
+		<Header />
+	</div>
 
 	{#if $navigating}
 		<PageLoading />
 	{:else}
-		<div class="flex-1">
-			<slot />
+		<div class="flex-1 flex">
+			<div class="flex-1"><slot /></div>
 		</div>
 	{/if}
 </div>

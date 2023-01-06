@@ -1,3 +1,7 @@
+<script lang="ts" context="module">
+	export type ContourChartData = { x: number; y: number }[];
+</script>
+
 <script lang="ts">
 	import { extent } from 'd3-array';
 	import { axisLeft, axisBottom } from 'd3-axis';
@@ -5,8 +9,7 @@
 	import { geoPath } from 'd3-geo';
 	import { scaleLinear } from 'd3-scale';
 	import { bandwidth, threshold } from '$visualizations/contour/store';
-
-	type ContourChartData = { x: number; y: number }[];
+	import { tweened } from 'svelte/motion';
 
 	import type { ChartProps } from '$components/chart/Chart.svelte';
 

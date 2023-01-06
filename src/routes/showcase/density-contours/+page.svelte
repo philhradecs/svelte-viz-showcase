@@ -30,6 +30,6 @@
 	]}
 >
 	<div class="h-full">
-		<Chart ml={55} mb={45} mt={25} chart={ContourChart} data={data.array} />
+		<Chart ml={55} mb={45} mt={25} mr={20} chart={ContourChart} data={data.array} />
 	</div>
 </ChartLayout>

@@ -29,7 +29,7 @@ const data = [
 	},
 	{
 		title: 'Data Story',
-		link: 'showcase/data-story',
+		link: 'data-story',
 		imgSrc: '',
 		color: 'dark'
 	}

@@ -14,6 +14,10 @@
 	} & Margin;
 
 	export type ChartProps<T = unknown> = ChartBaseProps & { data: T };
+
+	export type InferChartData<T> = T extends ComponentType<SvelteComponentTyped<infer Props>>
+		? Props['config']['data']
+		: never;
 </script>
 
 <script lang="ts">
@@ -28,19 +32,9 @@
 	type T = $$Generic<ComponentType<SvelteComponentTyped<{ config: ChartProps<any> }>>>;
 	export let chart: T;
 
-	type ChartData = T extends ComponentType<SvelteComponentTyped<infer Props>>
-		? Props['config']['data']
-		: never;
+	type ChartData = InferChartData<T>;
 
 	export let data: ChartData;
-
-	// let charts = {
-	// 	line: LineChart,
-	// 	contour: ContourChart,
-	// 	dotPlot: DotPlotChart
-	// } satisfies Record<typeof chartType, ComponentType>;
-
-	// let component = charts[chartType];
 
 	let svgEl: SVGSVGElement | undefined = undefined;
 	let chartEl: SVGGElement | undefined = undefined;
@@ -48,6 +42,8 @@
 	let clientHeight = 0;
 
 	let debounced = { clientWidth, clientHeight };
+
+	console.log(clientHeight);
 
 	let timeoutHandle: any = '';
 	$: {
