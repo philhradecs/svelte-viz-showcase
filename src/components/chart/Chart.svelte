@@ -15,8 +15,8 @@
 
 	export type ChartProps<T = unknown> = ChartBaseProps & { data: T };
 
-	export type InferChartData<T> = T extends ComponentType<SvelteComponentTyped<infer Props>>
-		? Props['config']['data']
+	export type InferChartProps<T> = T extends ComponentType<SvelteComponentTyped<infer Props>>
+		? Props['config']
 		: never;
 </script>
 
@@ -32,9 +32,13 @@
 	type T = $$Generic<ComponentType<SvelteComponentTyped<{ config: ChartProps<any> }>>>;
 	export let chart: T;
 
-	type ChartData = InferChartData<T>;
+	type ChartData = InferChartProps<T>['data'];
+	type ExtraProps = Omit<InferChartProps<T>, keyof ChartProps<any>>;
 
-	export let data: ChartData;
+	export let data: ChartData = undefined;
+	export let extraConfig: ExtraProps | undefined = undefined;
+	let className = '';
+	export { className as class };
 
 	let svgEl: SVGSVGElement | undefined = undefined;
 	let chartEl: SVGGElement | undefined = undefined;
@@ -42,8 +46,6 @@
 	let clientHeight = 0;
 
 	let debounced = { clientWidth, clientHeight };
-
-	console.log(clientHeight);
 
 	let timeoutHandle: any = '';
 	$: {
@@ -66,12 +68,17 @@
 					root: chartSelection,
 					width: debounced.clientWidth - (ml + mr),
 					height: debounced.clientHeight - (mt + mb),
-					data
+					data,
+					...extraConfig
 			  }
 			: undefined;
 </script>
 
-<div bind:clientWidth bind:clientHeight class="relative h-full max-w-full overflow-hidden">
+<div
+	bind:clientWidth
+	bind:clientHeight
+	class={`relative h-full max-w-full overflow-hidden ${className}`}
+>
 	{#if debounced.clientWidth > 0 && debounced.clientHeight > 0}
 		<svg
 			bind:this={svgEl}

@@ -1,6 +1,6 @@
 import type { Writable } from 'svelte/store';
 
-export type ControlType = 'slider' | 'checkbox' | 'select';
+export type ControlType = 'slider' | 'checkbox' | 'select' | 'radio';
 
 export type ControlBase<T> = {
 	type: ControlType;
@@ -17,6 +17,11 @@ export type SelectControlProps = ControlBase<string> & {
 	options: { label: string; value: string }[];
 };
 
+export type RadioGroupControlProps = ControlBase<string> & {
+	type: 'radio';
+	options: { label: string; value: string }[];
+};
+
 export type SliderControlProps = ControlBase<number> & {
 	type: 'slider';
 	min?: number;
@@ -25,4 +30,8 @@ export type SliderControlProps = ControlBase<number> & {
 	throttle?: number;
 };
 
-export type Control = CheckboxControlProps | SelectControlProps | SliderControlProps;
+export type Control =
+	| CheckboxControlProps
+	| SelectControlProps
+	| RadioGroupControlProps
+	| SliderControlProps;

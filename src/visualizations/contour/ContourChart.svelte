@@ -9,17 +9,21 @@
 	import { geoPath } from 'd3-geo';
 	import { scaleLinear } from 'd3-scale';
 	import { bandwidth, threshold } from '$visualizations/contour/store';
-	import { tweened } from 'svelte/motion';
+
+	import 'd3-transition';
 
 	import type { ChartProps } from '$components/chart/Chart.svelte';
 
-	export let config: ChartProps<ContourChartData>;
+	export let config: ChartProps<ContourChartData> & {
+		xDomain?: [number, number];
+		yDomain?: [number, number];
+	};
+
+	$: xDomain = config.xDomain || (extent(config.data, (d) => d.x) as any);
+	$: yDomain = config.yDomain || (extent(config.data, (d) => d.y) as any);
 
 	$: {
 		const { data, width, height, root } = config;
-
-		const xDomain = extent(data, (d) => d.x) as any;
-		const yDomain = extent(data, (d) => d.y) as any;
 
 		const xScale = scaleLinear().domain(xDomain).nice().rangeRound([0, width]);
 
@@ -37,8 +41,13 @@
 			.data(contours)
 			.join('path')
 			.classed('stroke-cyan-700', true)
-			.attr('stroke-width', (d, i) => (i % 5 ? 0.25 : 1))
-			.attr('d', geoPath());
+			.attr('d', geoPath())
+			.attr('stroke-width', (d, i) => (i % 5 ? 0.25 : 1));
+
+		// .attr('opacity', 0);
+		// .transition()
+		// .duration(400)
+		// .attr('opacity', 1);
 
 		root
 			.selectAll('g.axisLeft')
@@ -73,8 +82,8 @@
 					.attr('dy', null)
 					.attr('font-weight', 'bold')
 					.text('Idle (min.)')
-			)
-			.selectAll('text');
+			);
+		// .selectAll('text');
 		// .call((el) => {
 		//   const text = el.text()
 		//   el.attr('data-value', text)
@@ -82,6 +91,7 @@
 	}
 </script>
 
-<!-- {#each contours as path, i}
+<!-- 
+{#each $contours as path, i}
 	<path class="stroke-cyan-700" stroke-width={i % 5 ? 0.25 : 1} d={geoPath()(path)} />
 {/each} -->

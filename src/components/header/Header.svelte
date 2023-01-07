@@ -1,5 +1,5 @@
 <script lang="ts">
-	import AppLogo from 'carbon-icons-svelte/lib/Network_4.svelte';
+	import AppLogo from 'carbon-icons-svelte/lib/DataConnected.svelte';
 	import LogoGithub from 'carbon-icons-svelte/lib/LogoGithub.svelte';
 
 	import { headerContent } from '$components/header/store';

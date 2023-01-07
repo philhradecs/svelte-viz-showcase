@@ -2,13 +2,15 @@
 	import CheckboxControl from '$components/controls/Checkbox.svelte';
 	import SelectControl from '$components/controls/Select.svelte';
 	import SliderControl from '$components/controls/Slider.svelte';
+	import RadioControl from '$components/controls/RadioGroup.svelte';
 	import type { ComponentType } from 'svelte';
 	import type { Control, ControlType } from '$components/controls/types';
 
 	const controlTypeMap: Record<ControlType, ComponentType> = {
 		checkbox: CheckboxControl,
 		select: SelectControl,
-		slider: SliderControl
+		slider: SliderControl,
+		radio: RadioControl
 	};
 
 	export let controls: Control[] = [];

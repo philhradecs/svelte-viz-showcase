@@ -3,14 +3,15 @@ import globeCoverImage from './assets/images/cover-globe.png';
 import dashboardCoverImage from './assets/images/cover-dashboard.png';
 import dotPlotCoverImage from './assets/images/cover-dot-plot.png';
 import treemapCoverImage from './assets/images/cover-treemap.png';
+import scatterPlotCoverImage from './assets/images/cover-scatter-plot.png';
 
 const data = [
-	{
-		title: 'Dashboard',
-		link: 'dashboard',
-		imgSrc: dashboardCoverImage,
-		color: 'dark'
-	},
+	// {
+	// 	title: 'Dashboard',
+	// 	link: 'dashboard',
+	// 	imgSrc: dashboardCoverImage,
+	// 	color: 'dark'
+	// },
 	{
 		title: 'Density Contours',
 		link: 'showcase/density-contours',
@@ -28,10 +29,9 @@ const data = [
 		imgSrc: treemapCoverImage
 	},
 	{
-		title: 'Data Story',
-		link: 'data-story',
-		imgSrc: '',
-		color: 'dark'
+		title: 'Scatter Plot',
+		link: 'showcase/scatter-plot',
+		imgSrc: scatterPlotCoverImage
 	}
 
 	// {
@@ -44,6 +44,6 @@ const data = [
 	// 	link: 'showcase/line-chart',
 	// 	imgSrc: ''
 	// }
-];
+] as const;
 
 export default data;

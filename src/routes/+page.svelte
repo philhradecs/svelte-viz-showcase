@@ -1,12 +1,15 @@
 <script lang="ts">
-	import VizTile from '$components/VizTile.svelte';
+	import VizTile from '$components/tile/VizTile.svelte';
 
 	import data from '../showcase-data';
+	import ImgTile from '$components/tile/ImgTile.svelte';
+	import { Dashboard, DataRefinery } from 'carbon-icons-svelte';
+	import IconLink from '$components/IconLink.svelte';
 </script>
 
 <div class="mt-8 mb-8 container mx-auto px-5 ">
 	<div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-		<div class="col-span-full lg:col-span-2 xl:col-span-3 max-w-3xl mr-4 font-mono">
+		<div class=" row-span-2 col-span-full lg:col-span-2 xl:col-span-3 max-w-3xl mr-4 font-mono">
 			<h1 class="mb-2 lg:text-4xl">
 				Welcome to <span class="text-cyan-500">Viz</span>
 			</h1>
@@ -18,8 +21,17 @@
 			</p>
 		</div>
 
-		{#each data as { title, link, imgSrc, color }, i (title)}
-			<VizTile {title} {link} {imgSrc} {color} />
+		<div class="self-end mb-2 lg:mb-0">
+			<IconLink title="Dashboard" link="dashboard" icon={Dashboard} />
+		</div>
+		<div class="self-start mb-2 lg:mb-0">
+			<IconLink title="Data Story" link="data-story" icon={DataRefinery} />
+		</div>
+
+		<!-- <hr class="col-span-full lg:hidden border-gray-600" /> -->
+
+		{#each data as { title, link, imgSrc }, i (title)}
+			<ImgTile {title} {link} {imgSrc} />
 		{/each}
 	</div>
 </div>

@@ -31,9 +31,11 @@
 	</div>
 
 	{#if $navigating}
-		<PageLoading />
+		<div class="grow flex justify-center items-center">
+			<PageLoading />
+		</div>
 	{:else}
-		<div class="flex-1 flex">
+		<div class="grow flex">
 			<div class="flex-1"><slot /></div>
 		</div>
 	{/if}
