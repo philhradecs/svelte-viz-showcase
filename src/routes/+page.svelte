@@ -9,7 +9,7 @@
 
 <div class="mt-8 mb-8 container mx-auto px-5 ">
 	<div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-		<div class=" row-span-2 col-span-full lg:col-span-2 xl:col-span-3 max-w-3xl mr-4 font-mono">
+		<div class="mb-8 row-span-2 col-span-full lg:col-span-2 xl:col-span-3 max-w-3xl mr-4 font-mono">
 			<h1 class="mb-2 lg:text-4xl">
 				Welcome to <span class="text-cyan-500">Viz</span>
 			</h1>
@@ -28,7 +28,7 @@
 			<IconLink title="Data Story" link="data-story" icon={DataRefinery} />
 		</div>
 
-		<!-- <hr class="col-span-full lg:hidden border-gray-600" /> -->
+		<hr class="col-span-full lg:hidden border-gray-800 mb-4" />
 
 		{#each data as { title, link, imgSrc }, i (title)}
 			<ImgTile {title} {link} {imgSrc} />
