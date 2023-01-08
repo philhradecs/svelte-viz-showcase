@@ -8,7 +8,7 @@
 		<slot />
 
 		<div
-			class={`bg-gray-200 text-black transition-all group-hover:bg-cyan-300/80 group-hover:border-cyan-300/80 px-2.5 font-bold md:text-lg`}
+			class={`bg-gray-200 tracking-wide text-black transition-all group-hover:bg-cyan-300/80 group-hover:border-cyan-300/80 px-2.5 font-bold md:text-lg`}
 		>
 			{title}
 		</div>

@@ -12,7 +12,7 @@
 		<div class="shrink-0">
 			<svelte:component this={icon} size={32} class="text-cyan-300/80 group-hover:text-black" />
 		</div>
-		<div class="tracking-wider text-xl font-bold group-hover:text-black">
+		<div class="tracking-wide text-xl font-bold group-hover:text-black">
 			{title}
 		</div>
 	</div>
