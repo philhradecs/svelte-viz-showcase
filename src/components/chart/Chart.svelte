@@ -55,23 +55,26 @@
 		}, 200);
 	}
 
-	$: svgSelection = svgEl ? select<SVGSVGElement, any>(svgEl) : undefined;
-	$: chartSelection = chartEl ? select<SVGGElement, any>(chartEl) : undefined;
-	$: config =
-		svgSelection && chartSelection
-			? {
-					mt,
-					mr,
-					mb,
-					ml,
-					svg: svgSelection,
-					root: chartSelection,
-					width: debounced.clientWidth - (ml + mr),
-					height: debounced.clientHeight - (mt + mb),
-					data,
-					...extraConfig
-			  }
-			: undefined;
+	let config: ChartProps;
+	$: {
+		const svgSelection = svgEl ? select<SVGSVGElement, any>(svgEl) : undefined;
+		const chartSelection = chartEl ? select<SVGGElement, any>(chartEl) : undefined;
+		const width = debounced.clientWidth - (ml + mr);
+		const height = debounced.clientHeight - (mt + mb);
+		if (svgSelection && chartSelection && width > 0 && height > 0)
+			config = {
+				mt,
+				mr,
+				mb,
+				ml,
+				svg: svgSelection,
+				root: chartSelection,
+				width,
+				height,
+				data,
+				...extraConfig
+			};
+	}
 </script>
 
 <div

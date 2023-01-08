@@ -1,9 +1,8 @@
 <script lang="ts">
-	import VizTile from '$components/tile/VizTile.svelte';
-
 	import data from '../showcase-data';
 	import ImgTile from '$components/tile/ImgTile.svelte';
-	import { Dashboard, DataRefinery } from 'carbon-icons-svelte';
+	import Dashboard from 'carbon-icons-svelte/lib/Dashboard.svelte';
+	import DataRefinery from 'carbon-icons-svelte/lib/DataRefinery.svelte';
 	import IconLink from '$components/IconLink.svelte';
 </script>
 

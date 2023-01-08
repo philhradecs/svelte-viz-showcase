@@ -1,7 +1,6 @@
 <script lang="ts">
 	export let title: string;
 	export let link: string;
-	export let color: 'light' | 'dark' = 'light';
 </script>
 
 <a href={link} class="block h-full">
@@ -9,9 +8,7 @@
 		<slot />
 
 		<div
-			class={`${
-				color === 'dark' ? 'text-cyan-200 group-hover:text-black' : 'bg-gray-200 text-black'
-			}  transition-all group-hover:bg-cyan-300/80 group-hover:border-cyan-300/80 px-2.5 font-bold md:text-lg`}
+			class={`bg-gray-200 text-black transition-all group-hover:bg-cyan-300/80 group-hover:border-cyan-300/80 px-2.5 font-bold md:text-lg`}
 		>
 			{title}
 		</div>

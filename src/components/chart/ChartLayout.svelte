@@ -1,4 +1,5 @@
 <script lang="ts">
+	import SettingsAdjust from 'carbon-icons-svelte/lib/SettingsAdjust.svelte';
 	import ChartSidebar from '$components/chart/ChartSidebar.svelte';
 	import type { Control } from '$components/controls/types';
 	export let controls: Control[] = [];
@@ -6,7 +7,22 @@
 
 <div class="h-full flex gap-8 mr-4">
 	<div class="flex-1"><slot /></div>
-	<div class="w-[300px] max-w-[300px] pt-4">
-		<ChartSidebar title="Controls" {controls} />
-	</div>
+	{#if controls.length > 0}
+		<div class="md:hidden flex items-stretch fixed right-0 top-[60vh]">
+			<label
+				for="control-modal"
+				class="cursor-pointer p-2 pl-3 bg-cyan-900 rounded-tl-xl rounded-bl-xl flex items-center justify-center"
+				><SettingsAdjust size={24} /></label
+			>
+			<input type="checkbox" id="control-modal" class="modal-toggle" />
+			<label class="modal modal-bottom bg-transparent" for="control-modal">
+				<label class="modal-box relative rounded-none bg-primary/80" for="">
+					<ChartSidebar title="Controls" {controls} />
+				</label>
+			</label>
+		</div>
+		<div class="hidden md:block w-[300px] max-w-[300px] pt-4">
+			<ChartSidebar title="Controls" {controls} />
+		</div>
+	{/if}
 </div>
