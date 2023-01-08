@@ -9,7 +9,7 @@
 <div class="mt-8 mb-8 container mx-auto px-5 ">
 	<div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
 		<div class="mb-8 row-span-2 col-span-full lg:col-span-2 xl:col-span-3 max-w-3xl mr-4 font-mono">
-			<h1 class="mb-2 lg:text-4xl">
+			<h1 class="mb-2.5 lg:text-4xl">
 				Welcome to <span class="text-cyan-500">Viz</span>
 			</h1>
 			<p class="lg:text-lg text-justify lg:text-start">
