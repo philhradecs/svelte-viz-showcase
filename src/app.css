@@ -12,15 +12,15 @@
 		--highlight-rose: #a16e83;
 	}
 
-	body,
 	html {
 		height: 100%;
 	}
 
 	body {
+		min-height: 100%;
+		@apply bg-primary;
 		@apply font-sans;
 		@apply text-primary;
-		@apply bg-primary;
 	}
 
 	a {

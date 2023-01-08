@@ -25,18 +25,18 @@
 	}
 </script>
 
-<div class="flex flex-col min-h-full">
-	<div class="sticky top-0 left-0 z-10 bg-primary">
+<div class="flex flex-col min-h-screen">
+	<nav class="sticky top-0 left-0 z-20 bg-primary/95 backdrop-blur-sm">
 		<Header />
-	</div>
+	</nav>
 
 	{#if $navigating}
 		<div class="grow flex justify-center items-center">
 			<PageLoading />
 		</div>
 	{:else}
-		<div class="grow flex">
+		<main class="grow flex">
 			<div class="flex-1"><slot /></div>
-		</div>
+		</main>
 	{/if}
 </div>

@@ -34,7 +34,7 @@
 	}
 </script>
 
-<div class={`${className}`}>
+<div class={`relative z-10 ${className}`}>
 	<IntersectionObserver {element} bind:intersecting threshold={0.5}>
 		<section bind:this={element} class="bg-primary/60 -mx-5 px-5 py-6">
 			<slot />

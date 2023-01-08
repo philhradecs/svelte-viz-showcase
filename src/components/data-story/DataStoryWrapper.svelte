@@ -12,7 +12,7 @@
 </script>
 
 <article class={className}>
-	<div class="fixed inset-0 top-12 rounded-lg -z-10">
+	<div class="fixed inset-0 top-12 rounded-lg">
 		<div class="h-full flex items-center justify-center">
 			<slot name="chart" />
 		</div>
