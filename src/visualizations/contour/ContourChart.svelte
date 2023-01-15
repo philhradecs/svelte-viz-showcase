@@ -19,16 +19,14 @@
 		yDomain?: [number, number];
 	};
 
-	$: xDomain = config.xDomain || (extent(config.data, (d) => d.x) as any);
-	$: yDomain = config.yDomain || (extent(config.data, (d) => d.y) as any);
+	$: ({ data, width, height, root } = config);
+	$: xDomain = config.xDomain || (extent(data, (d) => d.x) as any);
+	$: yDomain = config.yDomain || (extent(data, (d) => d.y) as any);
+
+	$: xScale = scaleLinear().domain(xDomain).nice().rangeRound([0, config.width]);
+	$: yScale = scaleLinear().domain(yDomain).nice().rangeRound([config.height, 0]);
 
 	$: {
-		const { data, width, height, root } = config;
-
-		const xScale = scaleLinear().domain(xDomain).nice().rangeRound([0, width]);
-
-		const yScale = scaleLinear().domain(yDomain).nice().rangeRound([height, 0]);
-
 		const contours = contourDensity<ContourChartData[number]>()
 			.x((d) => xScale(d.x))
 			.y((d) => yScale(d.y))
@@ -41,14 +39,11 @@
 			.data(contours)
 			.join('path')
 			.classed('stroke-cyan-700', true)
-			.attr('d', geoPath())
-			.attr('stroke-width', (d, i) => (i % 5 ? 0.25 : 1));
+			.attr('stroke-width', (d, i) => (i % 5 ? 0.25 : 1))
+			.attr('d', geoPath());
+	}
 
-		// .attr('opacity', 0);
-		// .transition()
-		// .duration(400)
-		// .attr('opacity', 1);
-
+	$: {
 		root
 			.selectAll('g.axisLeft')
 			.data([data])

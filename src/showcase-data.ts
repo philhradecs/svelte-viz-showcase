@@ -8,40 +8,40 @@ import scatterPlotCoverImage from './assets/images/cover-scatter-plot.png';
 const data = [
 	// {
 	// 	title: 'Dashboard',
-	// 	link: 'dashboard',
+	// 	slug: 'dashboard',
 	// 	imgSrc: dashboardCoverImage,
 	// 	color: 'dark'
 	// },
 	{
 		title: 'Density Contours',
-		link: 'showcase/density-contours',
+		slug: 'density-contours',
 		imgSrc: contourCoverImage
 	},
 
 	{
 		title: 'Dot Plot',
-		link: 'showcase/dot-plot',
+		slug: 'dot-plot',
 		imgSrc: dotPlotCoverImage
 	},
 	{
 		title: 'Zoomable Treemap',
-		link: 'showcase/zoomable-treemap',
+		slug: 'zoomable-treemap',
 		imgSrc: treemapCoverImage
 	},
 	{
 		title: 'Scatter Plot',
-		link: 'showcase/scatter-plot',
+		slug: 'scatter-plot',
 		imgSrc: scatterPlotCoverImage
 	}
 
 	// {
 	// 	title: 'Interactive Globe',
-	// 	link: 'showcase/interactive-globe',
+	// 	slug: 'interactive-globe',
 	// 	imgSrc: globeCoverImage
 	// },
 	// {
 	// 	title: 'Line Chart',
-	// 	link: 'showcase/line-chart',
+	// 	slug: 'line-chart',
 	// 	imgSrc: ''
 	// }
 ] as const;

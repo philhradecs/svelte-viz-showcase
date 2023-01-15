@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-	import type { Selection } from 'd3-selection';
+	import { select, type Selection } from 'd3-selection';
 	export type Margin = {
 		mt: number;
 		mr: number;
@@ -11,6 +11,7 @@
 		root: Selection<SVGGElement, any, any, any>;
 		width: number;
 		height: number;
+		registerTooltip: (selector: string) => void;
 	} & Margin;
 
 	export type ChartProps<T = unknown> = ChartBaseProps & { data: T };
@@ -21,8 +22,10 @@
 </script>
 
 <script lang="ts">
-	import { select } from 'd3-selection';
 	import type { ComponentType, SvelteComponentTyped } from 'svelte';
+	import Measure from '../Measure.svelte';
+	import { getRegisterTooltip } from '../../utils/get-register-tooltip';
+	import 'tippy.js/dist/tippy.css';
 
 	export let mt: number = 0;
 	export let mr: number = 0;
@@ -42,60 +45,40 @@
 
 	let svgEl: SVGSVGElement | undefined = undefined;
 	let chartEl: SVGGElement | undefined = undefined;
-	let clientWidth = 0;
-	let clientHeight = 0;
-
-	let debounced = { clientWidth, clientHeight };
-
-	let timeoutHandle: any = '';
-	$: {
-		clearTimeout(timeoutHandle);
-		timeoutHandle = setTimeout(() => {
-			debounced = { clientWidth, clientHeight };
-		}, 200);
-	}
-
-	let config: ChartProps;
-	$: {
-		const svgSelection = svgEl ? select<SVGSVGElement, any>(svgEl) : undefined;
-		const chartSelection = chartEl ? select<SVGGElement, any>(chartEl) : undefined;
-		const width = debounced.clientWidth - (ml + mr);
-		const height = debounced.clientHeight - (mt + mb);
-		if (svgSelection && chartSelection && width > 0 && height > 0)
-			config = {
-				mt,
-				mr,
-				mb,
-				ml,
-				svg: svgSelection,
-				root: chartSelection,
-				width,
-				height,
-				data,
-				...extraConfig
-			};
-	}
 </script>
 
-<div
-	bind:clientWidth
-	bind:clientHeight
-	class={`relative h-full max-w-full overflow-hidden ${className}`}
->
-	{#if debounced.clientWidth > 0 && debounced.clientHeight > 0}
-		<svg
-			bind:this={svgEl}
-			width={debounced.clientWidth}
-			height={debounced.clientHeight}
-			stroke-linejoin="round"
-			fill="none"
-			class="absolute inset-0"
-		>
-			<g bind:this={chartEl} transform={`translate(${ml}, ${mt})`}>
-				{#if config}
-					<svelte:component this={chart} {config} />
-				{/if}
-			</g>
-		</svg>
-	{/if}
+<div class={`relative h-full max-w-full overflow-hidden ${className}`}>
+	<Measure let:height let:width>
+		{@const innerWidth = width - (ml + mr)}
+		{@const innerHeight = height - (mt + mb)}
+		{#if innerWidth > 0 && innerHeight > 0}
+			<svg
+				bind:this={svgEl}
+				{width}
+				{height}
+				stroke-linejoin="round"
+				fill="none"
+				class="absolute inset-0"
+			>
+				<g bind:this={chartEl} transform={`translate(${ml}, ${mt})`}>
+					<svelte:component
+						this={chart}
+						config={{
+							width: innerWidth,
+							height: innerHeight,
+							mt,
+							mr,
+							mb,
+							ml,
+							data,
+							svg: select(svgEl),
+							root: select(chartEl),
+							registerTooltip: getRegisterTooltip(svgEl),
+							...extraConfig
+						}}
+					/>
+				</g>
+			</svg>
+		{/if}
+	</Measure>
 </div>

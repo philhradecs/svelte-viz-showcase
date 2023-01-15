@@ -55,6 +55,7 @@
 		"@types/d3-transition": "^3.0.3",
 		"@types/lodash.debounce": "^4.0.7",
 		"@types/lodash.throttle": "^4.1.7",
+		"@untemps/svelte-use-tooltip": "^2.8.0",
 		"d3-array": "^3.2.1",
 		"d3-axis": "^3.0.0",
 		"d3-contour": "^4.0.0",
@@ -72,6 +73,7 @@
 		"d3-transition": "^3.0.1",
 		"daisyui": "^2.46.1",
 		"lodash.debounce": "^4.0.8",
-		"lodash.throttle": "^4.1.1"
+		"lodash.throttle": "^4.1.1",
+		"tippy.js": "^6.3.7"
 	}
 }

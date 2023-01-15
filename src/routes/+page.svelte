@@ -29,8 +29,8 @@
 
 		<hr class="col-span-full lg:hidden border-gray-800 mb-4" />
 
-		{#each data as { title, link, imgSrc }, i (title)}
-			<ImgTile {title} {link} {imgSrc} />
+		{#each data as { title, slug, imgSrc }, i (title)}
+			<ImgTile {title} link={`showcase/${slug}`} {imgSrc} />
 		{/each}
 	</div>
 </div>

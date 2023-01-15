@@ -21,7 +21,8 @@
 
 	export let config: ChartProps<DotPlotData>;
 
-	const { data: unsortedData, root, svg, ml } = config;
+	$: ({ data: unsortedData, root, svg, ml } = config);
+
 	const unsortedZDomain = new InternSet(map(unsortedData, (d) => d.age));
 	const colors = schemeSpectral[unsortedZDomain.size];
 	const colorScale = scaleOrdinal(unsortedZDomain, colors);

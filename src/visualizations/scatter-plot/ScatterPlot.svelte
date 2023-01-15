@@ -47,7 +47,7 @@
 	import { axisBottom, axisLeft } from 'd3-axis';
 
 	export let config: ChartProps;
-	const { root } = config;
+	$: ({ root, registerTooltip, height, width } = config);
 
 	$: data = generateData($scatterPlotDistribution, $scatterPlotPoints);
 
@@ -72,8 +72,6 @@
 	$: yScale = scaleLinear().domain([0, 100]).range([config.height, 0]);
 
 	$: {
-		const { height, width } = config;
-
 		root
 			.selectAll('g.axisLeft')
 			.data([data])
@@ -101,7 +99,12 @@
 					.selectAll('.axisBottom .tick line')
 					.attr('y2', -height)
 					.attr('stroke-opacity', $scatterPlotShowGrid ? 0.05 : 0)
+			)
+			.call((g) =>
+				g.selectAll('.axisBottom .tick').attr('data-tippy-content', (d) => JSON.stringify(d))
 			);
+
+		registerTooltip('.axisBottom .tick');
 	}
 
 	$: {
@@ -116,6 +119,9 @@
 			.attr('cy', (d) => yScale(d[1]))
 			.attr('fill', (d, i) => schemeSpectral[11][i % 11])
 			.attr('fill-opacity', 0.6)
-			.attr('stroke', (d, i) => schemeSpectral[11][i % 11]);
+			.attr('stroke', (d, i) => schemeSpectral[11][i % 11])
+			.attr('data-tippy-content', (d) => d[0]);
+
+		registerTooltip('circle');
 	}
 </script>
