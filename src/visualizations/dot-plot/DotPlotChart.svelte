@@ -18,14 +18,15 @@
 	import type { ChartProps } from '$components/chart/Chart.svelte';
 	import { select } from 'd3-selection';
 	import { page } from '$app/stores';
+	import { format } from 'd3-format';
 
 	export let config: ChartProps<DotPlotData>;
 
-	$: ({ data: unsortedData, root, svg, ml } = config);
+	$: ({ data: unsortedData, root, svg, ml, registerTooltip } = config);
 
-	const unsortedZDomain = new InternSet(map(unsortedData, (d) => d.age));
-	const colors = schemeSpectral[unsortedZDomain.size];
-	const colorScale = scaleOrdinal(unsortedZDomain, colors);
+	$: unsortedZDomain = new InternSet(map(unsortedData, (d) => d.age));
+	$: colors = schemeSpectral[unsortedZDomain.size];
+	$: colorScale = scaleOrdinal(unsortedZDomain, colors);
 
 	const orderOptions = $page.data.orderOptions as { label: string; value: string }[];
 	let trigger = false;
@@ -162,7 +163,16 @@
 			.join('circle')
 			.attr('cx', (i) => xScale(X[i]))
 			.attr('fill', (i) => colorScale(Z[i]))
-			.attr('r', (i) => ($order === Z[i] ? 4 : 3));
+			.attr('r', (i) => ($order === Z[i] ? 4 : 3))
+			.attr(
+				'data-tippy-content',
+				(i) =>
+					`State: <strong>${Y[i]}</strong><br>Age Group: <strong>${
+						Z[i]
+					}</strong><br>Portion: <strong>${format('.2%')(X[i])}</strong>`
+			);
+
+		registerTooltip('circle', { allowHTML: true });
 
 		g.selectAll('text')
 			.data((d) => [d])

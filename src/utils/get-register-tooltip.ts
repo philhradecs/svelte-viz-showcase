@@ -1,20 +1,24 @@
 import { onDestroy } from 'svelte';
-import { delegate, type DelegateInstance, followCursor } from 'tippy.js';
+import { delegate, type DelegateInstance, followCursor, type Props } from 'tippy.js';
+import 'tippy.js/dist/tippy.css';
 
-let tippyInstanceMap = new Map<string, DelegateInstance>();
-
-export const getRegisterTooltip = (parent: Element) => (selector: string) => {
-	if (parent) {
-		tippyInstanceMap.get(selector)?.destroy();
-
-		tippyInstanceMap = tippyInstanceMap.set(
-			selector,
-			delegate(parent, {
-				target: selector,
-				followCursor: true,
-				plugins: [followCursor]
-			})
-		);
-	}
+export type RegisterTooltipFn = (selector: string, options?: Partial<Props>) => void;
+export const getRegisterTooltip = (parent: Element): RegisterTooltipFn => {
+	const tippyInstanceMap = new Map<string, DelegateInstance>();
 	onDestroy(() => tippyInstanceMap.forEach((instance) => instance.destroy()));
+
+	return (selector, options) => {
+		if (parent) {
+			tippyInstanceMap.get(selector)?.destroy();
+			tippyInstanceMap.set(
+				selector,
+				delegate(parent, {
+					target: selector,
+					followCursor: true,
+					plugins: [followCursor],
+					...options
+				})
+			);
+		}
+	};
 };

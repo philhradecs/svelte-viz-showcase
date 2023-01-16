@@ -22,7 +22,7 @@
 		{
 			label: 'Thresholds',
 			type: 'slider',
-			min: 0,
+			min: 1,
 			max: 50,
 			writable: threshold,
 			throttle: 75

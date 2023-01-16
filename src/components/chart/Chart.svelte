@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
 	import { select, type Selection } from 'd3-selection';
+	import type { RegisterTooltipFn } from '../../utils/get-register-tooltip';
 	export type Margin = {
 		mt: number;
 		mr: number;
@@ -11,7 +12,7 @@
 		root: Selection<SVGGElement, any, any, any>;
 		width: number;
 		height: number;
-		registerTooltip: (selector: string) => void;
+		registerTooltip: RegisterTooltipFn;
 	} & Margin;
 
 	export type ChartProps<T = unknown> = ChartBaseProps & { data: T };
@@ -45,6 +46,8 @@
 
 	let svgEl: SVGSVGElement | undefined = undefined;
 	let chartEl: SVGGElement | undefined = undefined;
+
+	$: registerTooltip = svgEl ? getRegisterTooltip(svgEl) : () => {};
 </script>
 
 <div class={`relative h-full max-w-full overflow-hidden ${className}`}>
@@ -73,7 +76,7 @@
 							data,
 							svg: select(svgEl),
 							root: select(chartEl),
-							registerTooltip: getRegisterTooltip(svgEl),
+							registerTooltip,
 							...extraConfig
 						}}
 					/>

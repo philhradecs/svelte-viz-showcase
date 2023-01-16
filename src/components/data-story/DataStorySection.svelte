@@ -1,17 +1,19 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
 	import IntersectionObserver from 'svelte-intersection-observer';
-	import type { Writable } from 'svelte/store';
+	import type { DataStoryContext } from './DataStoryWrapper.svelte';
 	import { dataStoryStepQueue } from './store';
 
-	const stateWritable = getContext<Writable<any>>('data-story-context-key');
+	const { data, visibility } = getContext<DataStoryContext>('data-story-context-key');
 
+	export let hideChart = false;
 	export let step: number;
+
 	let className: string = '';
 	export { className as class };
 
-	type State = typeof $stateWritable;
-	export let state: (state: State) => State;
+	type State = typeof $data;
+	export let state: (state: State) => State = (d) => d;
 
 	let element: HTMLElement;
 	let intersecting: boolean;
@@ -26,17 +28,20 @@
 		wasShown = false;
 	}
 
-	$: {
-		if (!wasShown && $dataStoryStepQueue[0] === step) {
-			stateWritable.update(state);
+	$: if ($dataStoryStepQueue[0] === step) {
+		if (!wasShown) {
+			data.update(state);
+			visibility.set(hideChart ? 'hidden' : 'visible');
 			wasShown = true;
 		}
+	} else {
+		wasShown = false;
 	}
 </script>
 
 <div class={`relative z-10 ${className}`}>
-	<IntersectionObserver {element} bind:intersecting threshold={0.5}>
-		<section bind:this={element} class="bg-primary/60 -mx-5 px-5 py-6">
+	<IntersectionObserver {element} bind:intersecting rootMargin="-56px">
+		<section bind:this={element} class="bg-primary/90 backdrop-blur-sm -mx-5 px-5 py-6">
 			<slot />
 		</section>
 	</IntersectionObserver>

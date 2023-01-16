@@ -23,6 +23,13 @@
 		@apply text-primary;
 	}
 
+	*:focus {
+		outline: none;
+	}
+	*:focus-visible {
+		outline: auto;
+	}
+
 	a {
 		cursor: pointer;
 	}

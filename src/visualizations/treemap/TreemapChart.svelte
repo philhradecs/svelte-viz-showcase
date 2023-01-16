@@ -14,7 +14,6 @@
 		children?: TreemapNode[];
 	};
 	type HierarchyNodeDatum = {
-		value: number;
 		name: string;
 		leafUid?: string;
 		clipUid?: string;
@@ -30,7 +29,7 @@
 
 	export let config: ChartProps<TreemapNode>;
 
-	const { root: chartRoot } = config;
+	$: ({ root: chartRoot, registerTooltip } = config);
 
 	$: treemapData = calculateTreemap(config.data, config.width, config.height);
 	const formatNumber = format(',d');
@@ -52,14 +51,21 @@
 			.data(root.children?.concat(root) || [])
 			.join((enter) => {
 				return enter.append('g').attr('class', (d) => (d === root ? 'tile header' : 'tile'));
-			});
+			})
+			.attr(
+				'data-tippy-content',
+				(d) =>
+					`${getName(d)}\n${formatNumber(d.value || 0)}<br>${
+						d.children ? `${d.children.length} children` : 'Leaf Node'
+					}`
+			);
+
+		registerTooltip('g.tile', { allowHTML: true });
 
 		node
 			.filter((d) => (d === root ? !!d.parent : !!d.children))
 			.attr('cursor', 'pointer')
 			.on('click', (event, d) => (d === root ? zoomout(root) : zoomin(d)));
-
-		node.append('title').text((d) => `${getName(d)}\n${formatNumber(d.value)}`);
 
 		node
 			.append('rect')
@@ -106,7 +112,10 @@
 		x: any,
 		y: any
 	) {
-		group
+		(
+			group as GroupSelection &
+				Transition<SVGGElement | BaseType, HierarchyRectangularNode<any>, SVGGElement, any>
+		)
 			.selectAll<SVGGElement, HierarchyNode>('g.tile')
 			.attr('transform', (d) => {
 				return d === root ? `translate(0,-50)` : `translate(${x(d.x0)},${y(d.y0)})`;

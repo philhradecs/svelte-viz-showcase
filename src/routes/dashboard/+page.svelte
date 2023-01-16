@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { select } from 'd3-selection';
 	import Chart from '$components/chart/Chart.svelte';
 
 	import ContourChart from '$visualizations/contour/ContourChart.svelte';
@@ -10,7 +9,7 @@
 	import { headerContent } from '$components/header/store';
 	export let data: PageData;
 	const { contourData, scatterplotData, treemapData } = data;
-	headerContent.set({ title: 'Dashboard' });
+	$headerContent = { title: 'Dashboard' };
 </script>
 
 <div class="h-full flex flex-col">
