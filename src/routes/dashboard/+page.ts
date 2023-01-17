@@ -1,6 +1,6 @@
 import type { PageLoad } from './$types';
 import { _fetchContoursData } from '../../routes/showcase/density-contours/+page';
-import { generateScatterplotData } from '../../visualizations/scatter-plot/ScatterPlot.svelte';
+import { generateScatterplotData } from '../showcase/scatter-plot/+page.svelte';
 import { _fetchTreemapData } from '../../routes/showcase/zoomable-treemap/+page';
 
 export const _fetchDashboardData = () => ({

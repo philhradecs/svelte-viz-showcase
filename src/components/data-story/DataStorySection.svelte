@@ -1,41 +1,40 @@
 <script lang="ts">
-	import { getContext } from 'svelte';
 	import IntersectionObserver from 'svelte-intersection-observer';
+	import { createEventDispatcher, getContext } from 'svelte';
 	import type { DataStoryContext } from './DataStoryWrapper.svelte';
-	import { dataStoryStepQueue } from './store';
 
-	const { data, visibility } = getContext<DataStoryContext>('data-story-context-key');
+	const dispatch = createEventDispatcher();
 
-	export let hideChart = false;
-	export let step: number;
+	const { index, queue } = getContext<DataStoryContext>('SetIndex');
+	const sectionIndex = index();
 
 	let className: string = '';
 	export { className as class };
 
-	type State = typeof $data;
-	export let state: (state: State) => State = (d) => d;
-
 	let element: HTMLElement;
 	let intersecting: boolean;
-	$: wasShown = false;
+	let wasActive = false;
 
-	$: if (intersecting && !$dataStoryStepQueue.includes(step)) {
-		dataStoryStepQueue.update((queue) =>
-			step < $dataStoryStepQueue[0] ? [step, ...queue] : [...queue, step]
-		);
-	} else if (!intersecting && $dataStoryStepQueue.includes(step)) {
-		dataStoryStepQueue.update((queue) => queue.filter((d) => d !== step));
-		wasShown = false;
+	$: if (intersecting && !$queue.includes(sectionIndex)) {
+		queue.add(sectionIndex);
+	} else if (!intersecting && $queue.includes(sectionIndex)) {
+		queue.remove(sectionIndex);
 	}
 
-	$: if ($dataStoryStepQueue[0] === step) {
-		if (!wasShown) {
-			data.update(state);
-			visibility.set(hideChart ? 'hidden' : 'visible');
-			wasShown = true;
+	$: isSectionActive = $queue[0] === sectionIndex;
+
+	$: isQueueEmpty = $queue.length === 0;
+	$: if (!isQueueEmpty && isSectionActive && !wasActive) {
+		console.log('in', sectionIndex);
+		dispatch('in');
+		wasActive = true;
+	}
+	$: if (!isQueueEmpty && !isSectionActive) {
+		if (wasActive) {
+			console.log('out', sectionIndex);
+			dispatch('out');
 		}
-	} else {
-		wasShown = false;
+		wasActive = false;
 	}
 </script>
 

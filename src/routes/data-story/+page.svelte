@@ -3,46 +3,59 @@
 	import StorySection from '$components/data-story/DataStorySection.svelte';
 	import Chart from '$components/chart/Chart.svelte';
 	import ScatterPlot, {
-		generateScatterplotData,
 		type ScatterPlotData
 	} from '$visualizations/scatter-plot/ScatterPlot.svelte';
-	import {
-		scatterPlotPointRadius,
-		type ScatterPlotDistribution
-	} from '$visualizations/scatter-plot/store';
 
-	import { writable } from 'svelte/store';
 	import { headerContent } from '$components/header/store';
 	import headerImage from '$assets/images/data-story-header.jpg';
+	import { generateScatterplotData } from '../showcase/scatter-plot/+page.svelte';
+	import type { ScatterPlotDistribution } from '$visualizations/scatter-plot/store';
 
 	$headerContent = { title: 'Data Story' };
 
-	const data: ScatterPlotData = generateScatterplotData('poisson', 200);
-	export const vizData = writable<ScatterPlotData>(data);
+	let data: ScatterPlotData = [];
+	let pointRadius: number = 5;
+	let hidden = false;
+	let fullWidth = false;
 
-	const switchDistribution =
-		(distribution: ScatterPlotDistribution, radius: number) => (state: ScatterPlotData) => {
-			$scatterPlotPointRadius = radius;
-			return generateScatterplotData(distribution, 200);
+	const hideChart =
+		(state = true) =>
+		() => {
+			hidden = state;
 		};
+
+	const switchDistribution = (distribution: ScatterPlotDistribution, radius: number) => () => {
+		pointRadius = radius;
+		data = generateScatterplotData(distribution, 200);
+	};
 </script>
 
 <div class="mt-8 mb-8">
-	<DataStoryWrapper store={vizData} class="">
-		<div slot="chart" class="w-[100vw] h-[40vh] mt-[10vh] lg:w-[80vw] xl:w-[60vw]">
+	<DataStoryWrapper class="">
+		<div
+			slot="chart"
+			class:w-full={fullWidth}
+			class="w-[100vw] h-[40vh] mt-[5vh] lg:w-[80vw] xl:w-[60vw] transition-opacity"
+			class:opacity-0={hidden}
+		>
 			<Chart
 				mt={20}
 				mr={40}
 				mb={30}
 				ml={40}
 				chart={ScatterPlot}
-				data={$vizData}
-				extraConfig={{ xDomain: [0, 100], yDomain: [0, 100] }}
+				{data}
+				extraConfig={{ xDomain: [0, 100], yDomain: [0, 100], pointRadius }}
 			/>
 		</div>
-		<img src={headerImage} alt="header-abstract" />
+		<img
+			src={headerImage}
+			alt="header-abstract"
+			class="aspect-video md:aspect-auto md:h-[320px] object-cover"
+			height={320}
+		/>
 		<h1 class="mt-3 mb-6 tracking-wide">Data Story Test Heading</h1>
-		<StorySection hideChart step={0} class="mb-[100px]">
+		<StorySection on:in={hideChart(true)} on:out={hideChart(false)} class="">
 			<div>
 				<h2>Intro</h2>
 				Red and Slim found the two strange little animals the morning after they heard the thunder sounds.
@@ -57,7 +70,7 @@
 				D3.js is a JavaScript library for manipulating documents based on data.
 			</div>
 		</StorySection>
-		<StorySection state={switchDistribution('uniform', 1)} step={1} class="mb-[60vh]">
+		<StorySection on:in={switchDistribution('uniform', 1)} class="mb-[60vh]">
 			<div>
 				<h2>Section 1</h2>
 				The call was a hoarse, urgent whisper, and the youngster bounded to the open window. Slim wasn't
@@ -68,7 +81,7 @@
 				make their appearance.
 			</div>
 		</StorySection>
-		<StorySection state={switchDistribution('poisson', 4)} step={2} class="mb-[60vh]">
+		<StorySection on:in={switchDistribution('poisson', 4)} class="mb-[60vh]">
 			<div>
 				<h2>Section 2</h2>
 				Slim cried, "Hi, Red!" and waved cheerfully, still blinking the sleep out of himself. Red kept
@@ -77,7 +90,7 @@
 				the grass was wet. Slim said, more softly, "What's the matter?"
 			</div>
 		</StorySection>
-		<StorySection state={switchDistribution('normal', 2)} step={3} class="mb-[60vh]">
+		<StorySection on:in={switchDistribution('normal', 2)} class="mb-[60vh]">
 			<div>
 				<h2>Section 3</h2>
 				Red only waved for him to come out. Slim dressed quickly, gladly confining his morning wash to
@@ -87,7 +100,7 @@
 				on in or you'll catch your death of cold.'"
 			</div>
 		</StorySection>
-		<StorySection state={switchDistribution('bates', 10)} step={4} class="mb-[60vh]">
+		<StorySection on:in={switchDistribution('bates', 10)} class="mb-[60vh]">
 			<div>
 				<h2>Section 4</h2>
 				powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
@@ -96,10 +109,16 @@
 				and a data-driven approach to DOM manipulation.
 			</div>
 		</StorySection>
-		<StorySection step={5}>
+		<StorySection>
 			<div>
 				<h2>The End</h2>
 			</div>
 		</StorySection>
 	</DataStoryWrapper>
 </div>
+
+<style>
+	h2 {
+		margin-bottom: 10px;
+	}
+</style>
