@@ -6,35 +6,44 @@
 	import { schemeSpectral } from 'd3-scale-chromatic';
 	import drawLegend from '../utility/legend';
 
-	import {
-		order,
-		transitionDelay,
-		transitionDuration,
-		highlightColor
-	} from '$visualizations/dot-plot/store';
-
 	type DotPlotData = { population: number; state: string; age: string }[];
 
 	import type { ChartProps } from '$components/chart/Chart.svelte';
 	import { select } from 'd3-selection';
 	import { page } from '$app/stores';
 	import { format } from 'd3-format';
+	import { writable, type Writable } from 'svelte/store';
 
-	export let config: ChartProps<DotPlotData>;
+	const orderOptions = $page.data.orderOptions as { label: string; value: string }[];
+	export let config: ChartProps<DotPlotData> & {
+		order?: Writable<string>;
+		transitionDelay?: number;
+		transitionDuration?: number;
+		highlightColor?: string;
+	};
 
-	$: ({ data: unsortedData, root, svg, ml, registerTooltip } = config);
+	$: ({
+		data: unsortedData,
+		root,
+		svg,
+		ml,
+		registerTooltip,
+		order = writable('state'),
+		transitionDelay = 35,
+		transitionDuration = 550,
+		highlightColor = ''
+	} = config);
 
 	$: unsortedZDomain = new InternSet(map(unsortedData, (d) => d.age));
 	$: colors = schemeSpectral[unsortedZDomain.size];
 	$: colorScale = scaleOrdinal(unsortedZDomain, colors);
 
-	const orderOptions = $page.data.orderOptions as { label: string; value: string }[];
 	let trigger = false;
 	$: {
 		if (trigger && orderOptions) {
-			$highlightColor;
-			$transitionDelay;
-			$transitionDuration;
+			highlightColor;
+			transitionDelay;
+			transitionDuration;
 			order.update((currentValue) => {
 				const currentOptionIdx = orderOptions.findIndex((d) => d.value === currentValue);
 				const nextOptionIdx = (currentOptionIdx + 1) % (orderOptions.length - 1);
@@ -117,35 +126,35 @@
 				select(nodes[i])
 					.call(async (el) => {
 						el.transition()
-							.duration($transitionDuration * 0.1)
-							.delay(i * $transitionDelay)
+							.duration(transitionDuration * 0.1)
+							.delay(i * transitionDelay)
 							.attr('opacity', 1)
 							.call((t) =>
 								t
 									.selectAll('line')
 									.transition()
-									.duration($transitionDuration * 0.1)
-									.style('stroke', $highlightColor)
+									.duration(transitionDuration * 0.1)
+									.style('stroke', highlightColor)
 							)
 							.transition()
-							.delay($transitionDuration * 0.8)
-							.duration($transitionDuration * 0.3)
+							.delay(transitionDuration * 0.8)
+							.duration(transitionDuration * 0.3)
 							.attr('opacity', 0.6)
 							.call((t) =>
 								t
 									.selectAll('line')
 									.transition()
-									.duration($transitionDuration * 0.1)
+									.duration(transitionDuration * 0.1)
 									.style('stroke', null)
 							);
 					})
 					.transition('transform')
-					.duration($transitionDuration)
-					.delay(i * $transitionDelay + $transitionDuration * 0.2)
+					.duration(transitionDuration)
+					.delay(i * transitionDelay + transitionDuration * 0.2)
 					.attr('transform', `translate(0,${yScale(y)})`);
 			})
 			.transition()
-			.delay(indexGroups.size * $transitionDelay + $transitionDuration / 3)
+			.delay(indexGroups.size * transitionDelay + transitionDuration / 3)
 			.attr('opacity', 1);
 
 		g.selectAll('line')

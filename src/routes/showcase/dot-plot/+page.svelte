@@ -1,15 +1,16 @@
 <script lang="ts">
 	import ChartLayout from '$components/chart/ChartLayout.svelte';
 	import Chart from '$components/chart/Chart.svelte';
-	import {
-		highlightColor,
-		order,
-		transitionDelay,
-		transitionDuration
-	} from '$visualizations/dot-plot/store';
 	import DotPlotChart from '$visualizations/dot-plot/DotPlotChart.svelte';
 
 	import type { PageData } from './$types';
+	import { writable } from 'svelte/store';
+
+	export const order = writable('state');
+	export const transitionDelay = writable(35);
+	export const transitionDuration = writable(550);
+	export const highlightColor = writable<string>('');
+
 	export let data: PageData;
 
 	const { data: dotPlotData, orderOptions } = data;
@@ -68,6 +69,18 @@
 	]}
 >
 	<div class="h-full pt-4">
-		<Chart ml={50} mb={30} mt={105} chart={DotPlotChart} data={dotPlotData} />
+		<Chart
+			ml={50}
+			mb={30}
+			mt={105}
+			chart={DotPlotChart}
+			data={dotPlotData}
+			extraConfig={{
+				highlightColor: $highlightColor,
+				transitionDelay: $transitionDelay,
+				transitionDuration: $transitionDuration,
+				order
+			}}
+		/>
 	</div>
 </ChartLayout>

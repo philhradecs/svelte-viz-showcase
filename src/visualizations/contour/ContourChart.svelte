@@ -8,7 +8,6 @@
 	import { contourDensity } from 'd3-contour';
 	import { geoPath } from 'd3-geo';
 	import { scaleLinear } from 'd3-scale';
-	import { bandwidth, threshold } from '$visualizations/contour/store';
 
 	import 'd3-transition';
 
@@ -17,9 +16,11 @@
 	export let config: ChartProps<ContourChartData> & {
 		xDomain?: [number, number];
 		yDomain?: [number, number];
+		bandwidth?: number;
+		threshold?: number;
 	};
 
-	$: ({ data, width, height, root } = config);
+	$: ({ data, width, height, root, bandwidth = 25, threshold = 30 } = config);
 	$: xDomain = config.xDomain || (extent(data, (d) => d.x) as any);
 	$: yDomain = config.yDomain || (extent(data, (d) => d.y) as any);
 
@@ -31,8 +32,8 @@
 			.x((d) => xScale(d.x))
 			.y((d) => yScale(d.y))
 			.size([width, height])
-			.bandwidth($bandwidth)
-			.thresholds($threshold)(data);
+			.bandwidth(bandwidth)
+			.thresholds(threshold)(data);
 
 		root
 			.selectAll('path')

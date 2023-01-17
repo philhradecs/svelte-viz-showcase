@@ -1,11 +1,13 @@
 <script lang="ts">
 	import Chart from '$components/chart/Chart.svelte';
-	import { bandwidth, threshold } from '$visualizations/contour/store';
 	import ChartLayout from '$components/chart/ChartLayout.svelte';
 	import type { PageData } from './$types';
 
 	import ContourChart from '$visualizations/contour/ContourChart.svelte';
+	import { writable } from 'svelte/store';
 
+	const bandwidth = writable(25);
+	const threshold = writable(30);
 	export let data: PageData;
 </script>
 
@@ -30,6 +32,14 @@
 	]}
 >
 	<div class="h-full">
-		<Chart ml={55} mb={45} mt={25} mr={20} chart={ContourChart} data={data.array} />
+		<Chart
+			ml={55}
+			mb={45}
+			mt={25}
+			mr={20}
+			chart={ContourChart}
+			data={data.array}
+			extraConfig={{ bandwidth: $bandwidth, threshold: $threshold }}
+		/>
 	</div>
 </ChartLayout>

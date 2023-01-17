@@ -11,7 +11,7 @@
 		<div class="md:hidden flex items-stretch fixed right-0 top-[60vh]">
 			<label
 				for="control-modal"
-				class="cursor-pointer p-1.5 pl-2 bg-cyan-900 rounded-tl-md rounded-bl-md flex items-center"
+				class="cursor-pointer p-1.5 pl-2 bg-cyan-900 rounded-tl-sm rounded-bl-sm flex items-center"
 				><SettingsAdjust size={24} /></label
 			>
 			<input type="checkbox" id="control-modal" class="modal-toggle" />
