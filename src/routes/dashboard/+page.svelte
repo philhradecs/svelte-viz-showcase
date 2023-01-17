@@ -13,11 +13,11 @@
 </script>
 
 <div class="h-full flex flex-col">
-	<div class="px-6 py-0.5 bg-gray-700">
-		<div class="flex gap-4 items-center justify-between">
+	<div class="px-6 bg-gray-700 py-2">
+		<div class="flex gap-3 items-center justify-between flex-wrap">
 			<h3 class="text-bg-primary font-mono">Controls</h3>
 			<div class="basis-[400px]">
-				<input type="search" class="w-full py-1 text-base rounded px-3" placeholder="Filter Data" />
+				<input type="search" class="w-full  text-base rounded px-3" placeholder="Filter Data" />
 			</div>
 			<div class="flex items-center gap-2 text-gray-300 text-sm">
 				<div>Min</div>
