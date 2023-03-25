@@ -11,6 +11,7 @@
 
 	import { axisBottom, axisLeft } from 'd3-axis';
 	import { format } from 'd3-format';
+	import { transition } from 'd3-transition';
 
 	export let config: ChartProps<ScatterPlotData> & {
 		xDomain?: [number, number];
@@ -18,6 +19,7 @@
 		showGrid?: boolean;
 		pointRadius?: number;
 	};
+
 	$: ({ root, registerTooltip, height, width, data, showGrid, pointRadius = 5 } = config);
 
 	$: xScale = scaleLinear()
@@ -27,14 +29,13 @@
 	$: yScale = scaleLinear()
 		.domain(config.yDomain || [0, 100])
 		.range([config.height, 0]);
-
 	$: {
 		root
 			.selectAll('g.axisLeft')
 			.data([data])
 			.join('g')
 			.classed('axisLeft', true)
-			.call(axisLeft(yScale).tickSizeOuter(0) as any)
+			.call((el) => el.transition().call(axisLeft(yScale).tickSizeOuter(0) as any))
 			.call((g) => g.select('.domain').remove())
 			.call((g) =>
 				g
@@ -49,7 +50,7 @@
 			.join('g')
 			.classed('axisBottom', true)
 			.attr('transform', `translate(0,${height})`)
-			.call(axisBottom(xScale).tickSizeOuter(0) as any)
+			.call((el) => el.transition().call(axisBottom(xScale).tickSizeOuter(0) as any))
 			.call((g) => g.select('.domain').remove())
 			.call((g) =>
 				g
@@ -70,7 +71,6 @@
 				(exit) => exit.transition().style('opacity', 0).remove()
 			)
 			.transition()
-			.duration(400)
 			.attr('r', pointRadius)
 			.attr('cx', (d) => xScale(d[0]))
 			.attr('cy', (d) => yScale(d[1]))

@@ -1,5 +1,5 @@
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = () => {
-	return { title: 'Data Story' };
+	return { title: 'Data Story Scrolly' };
 };

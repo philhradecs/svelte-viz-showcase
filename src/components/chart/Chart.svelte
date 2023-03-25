@@ -47,7 +47,6 @@
 
 	let svgEl: SVGSVGElement | undefined = undefined;
 	let chartEl: SVGGElement | undefined = undefined;
-
 	$: registerTooltip = svgEl ? getRegisterTooltip(svgEl) : () => {};
 </script>
 
