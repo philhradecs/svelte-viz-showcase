@@ -5,11 +5,12 @@
 
 	const dispatch = createEventDispatcher();
 
-	const { index, queue } = getContext<DataStoryContext>('SetIndex');
+	const { index, queue, hideVisualisation } = getContext<DataStoryContext>('DataStoryContext');
 	const sectionIndex = index();
 
 	let className: string = '';
 	export { className as class };
+	export let hideVis = false;
 
 	let element: HTMLElement;
 	let intersecting: boolean;
@@ -27,6 +28,7 @@
 	$: if (!isQueueEmpty && isSectionActive && !wasActive) {
 		console.log('in', sectionIndex);
 		dispatch('in');
+		hideVisualisation(hideVis);
 		wasActive = true;
 	}
 	$: if (!isQueueEmpty && !isSectionActive) {

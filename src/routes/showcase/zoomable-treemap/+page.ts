@@ -6,6 +6,6 @@ export const _fetchTreemapData = () => {
 };
 
 export const load: PageLoad = () => {
-	const data = _fetchTreemapData();
-	return data;
+	const chartData = _fetchTreemapData();
+	return {chartData, title: "Zoomable Treemap"};
 };

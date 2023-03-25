@@ -3,7 +3,6 @@
 	import Chart from '$components/chart/Chart.svelte';
 	import DotPlotChart from '$visualizations/dot-plot/DotPlotChart.svelte';
 
-	import type { PageData } from './$types';
 	import { writable } from 'svelte/store';
 
 	export const order = writable('state');
@@ -11,9 +10,7 @@
 	export const transitionDuration = writable(550);
 	export const highlightColor = writable<string>('');
 
-	export let data: PageData;
-
-	const { data: dotPlotData, orderOptions } = data;
+	export let data;
 </script>
 
 <ChartLayout
@@ -21,7 +18,7 @@
 		{
 			label: 'Order By',
 			type: 'select',
-			options: orderOptions,
+			options: data.orderOptions,
 			writable: order
 		},
 		{
@@ -74,7 +71,7 @@
 			mb={30}
 			mt={105}
 			chart={DotPlotChart}
-			data={dotPlotData}
+			data={data.chartData}
 			extraConfig={{
 				highlightColor: $highlightColor,
 				transitionDelay: $transitionDelay,

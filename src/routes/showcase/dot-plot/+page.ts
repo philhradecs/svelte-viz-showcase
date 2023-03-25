@@ -11,8 +11,8 @@ export const _fetchDotPlotData = () => {
 };
 
 export const load: PageLoad = () => {
-	const data = _fetchDotPlotData();
-	const ageCategories = [...new Set(data.map(({ age }) => age))];
+	const chartData = _fetchDotPlotData();
+	const ageCategories = [...new Set(chartData.map(({ age }) => age))];
 	const orderOptions = [
 		{ label: 'State', value: 'state' },
 		...ageCategories.map((age) => ({
@@ -20,5 +20,5 @@ export const load: PageLoad = () => {
 			value: age
 		}))
 	];
-	return { orderOptions, data };
+	return { orderOptions, chartData, title: 'Dot Plot' };
 };

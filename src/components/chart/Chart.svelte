@@ -40,6 +40,7 @@
 	type ExtraProps = Omit<InferChartProps<T>, keyof ChartProps<any>>;
 
 	export let data: ChartData = undefined;
+
 	export let extraConfig: ExtraProps | undefined = undefined;
 	let className = '';
 	export { className as class };

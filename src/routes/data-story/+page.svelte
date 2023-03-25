@@ -6,23 +6,15 @@
 		type ScatterPlotData
 	} from '$visualizations/scatter-plot/ScatterPlot.svelte';
 
-	import { headerContent } from '$components/header/store';
 	import headerImage from '$assets/images/data-story-header.jpg';
-	import { generateScatterplotData } from '../showcase/scatter-plot/+page.svelte';
-	import type { ScatterPlotDistribution } from '$visualizations/scatter-plot/store';
-
-	$headerContent = { title: 'Data Story' };
+	import {
+		generateScatterplotData,
+		type ScatterPlotDistribution
+	} from '../showcase/scatter-plot/+page.svelte';
 
 	let data: ScatterPlotData = [];
 	let pointRadius: number = 5;
-	let hidden = false;
 	let fullWidth = false;
-
-	const hideChart =
-		(state = true) =>
-		() => {
-			hidden = state;
-		};
 
 	const switchDistribution = (distribution: ScatterPlotDistribution, radius: number) => () => {
 		pointRadius = radius;
@@ -34,9 +26,7 @@
 	<DataStoryWrapper class="">
 		<div
 			slot="chart"
-			class:w-full={fullWidth}
-			class="w-[100vw] h-[40vh] mt-[5vh] lg:w-[80vw] xl:w-[60vw] transition-opacity"
-			class:opacity-0={hidden}
+			class={`h-[40vh] mt-[5vh] ${fullWidth ? 'w-[100vw]' : 'lg:w-[80vw] xl:w-[60vw]'}`}
 		>
 			<Chart
 				mt={20}
@@ -55,7 +45,7 @@
 			height={320}
 		/>
 		<h1 class="mt-3 mb-6 tracking-wide">Data Story Test Heading</h1>
-		<StorySection on:in={hideChart(true)} on:out={hideChart(false)} class="">
+		<StorySection hideVis>
 			<div>
 				<h2>Intro</h2>
 				Red and Slim found the two strange little animals the morning after they heard the thunder sounds.

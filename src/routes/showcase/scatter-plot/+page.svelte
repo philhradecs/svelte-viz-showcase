@@ -4,7 +4,7 @@
 
 	export const scatterPlotDistributions = ['uniform', 'normal', 'bates', 'poisson'] as const;
 
-	type ScatterPlotDistribution = typeof scatterPlotDistributions[number];
+	export type ScatterPlotDistribution = (typeof scatterPlotDistributions)[number];
 
 	const randomFnMap = {
 		uniform: randomUniform(),

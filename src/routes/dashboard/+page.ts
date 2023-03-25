@@ -11,5 +11,5 @@ export const _fetchDashboardData = () => ({
 
 export const load: PageLoad = () => {
 	const data = _fetchDashboardData();
-	return data;
+	return {dashboardData: data, title: 'Dashboard'};
 };

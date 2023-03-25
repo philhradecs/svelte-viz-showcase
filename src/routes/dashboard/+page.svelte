@@ -6,10 +6,9 @@
 	import TreemapChart from '$visualizations/treemap/TreemapChart.svelte';
 
 	import type { PageData } from './$types';
-	import { headerContent } from '$components/header/store';
+
 	export let data: PageData;
-	const { contourData, scatterplotData, treemapData } = data;
-	$headerContent = { title: 'Dashboard' };
+	const { contourData, scatterplotData, treemapData } = data.dashboardData;
 </script>
 
 <div class="h-full flex flex-col">
@@ -17,7 +16,7 @@
 		<div class="flex gap-3 items-center justify-between flex-wrap">
 			<h3 class="text-bg-primary font-mono">Controls</h3>
 			<div class="basis-[400px]">
-				<input type="search" class="w-full  text-base rounded px-3" placeholder="Filter Data" />
+				<input type="search" class="w-full text-base rounded px-3" placeholder="Filter Data" />
 			</div>
 			<div class="flex items-center gap-2 text-gray-300 text-sm">
 				<div>Min</div>
