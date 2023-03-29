@@ -9,9 +9,7 @@
 	import { geoPath } from 'd3-geo';
 	import { scaleLinear } from 'd3-scale';
 
-	import 'd3-transition';
-
-	import type { ChartProps } from '$components/chart/Chart.svelte';
+	import type { ChartProps } from '$components/chart/ChartRoot.svelte';
 
 	export let config: ChartProps<ContourChartData> & {
 		xDomain?: number[];
@@ -86,8 +84,3 @@
 		// })
 	}
 </script>
-
-<!-- 
-{#each $contours as path, i}
-	<path class="stroke-cyan-700" stroke-width={i % 5 ? 0.25 : 1} d={geoPath()(path)} />
-{/each} -->

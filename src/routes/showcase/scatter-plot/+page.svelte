@@ -35,7 +35,7 @@
 
 <script lang="ts">
 	import ChartLayout from '$components/chart/ChartLayout.svelte';
-	import Chart from '$components/chart/Chart.svelte';
+	import Chart from '$components/chart/ChartRoot.svelte';
 	import ScatterPlot from '$visualizations/scatter-plot/ScatterPlot.svelte';
 	import { scaleLinear } from 'd3-scale';
 	import { writable } from 'svelte/store';

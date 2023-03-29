@@ -1,5 +1,6 @@
 <script lang="ts">
-	import Chart, { type ChartProps } from '$components/chart/Chart.svelte';
+	import ChartAligner from '$components/data-story/ChartAligner.svelte';
+	import Chart, { type ChartProps } from '$components/chart/ChartRoot.svelte';
 
 	import headerImage from '$assets/images/data-story-header.jpg';
 	import { generateScatterplotData } from '../showcase/scatter-plot/+page.svelte';
@@ -15,6 +16,7 @@
 		mr: 40,
 		mb: 30,
 		ml: 40,
+		chartType: 'scatter',
 		extraConfig: {
 			xDomain: [0, 100] as number[],
 			yDomain: [0, 100] as number[]
@@ -24,42 +26,40 @@
 	const stepsConfig = {
 		step1: {
 			...scatterPlotDefaultProps,
-			chartType: 'scatter',
 			data: generateScatterplotData('poisson', 200),
 			pointRadius: 2
 		},
 		step2: {
 			...scatterPlotDefaultProps,
-			chartType: 'scatter',
 			data: generateScatterplotData('bates', 200),
 			pointRadius: 5
 		},
 		step3: {
 			chartType: 'contour',
+			fullSize: true,
+			mt: 20,
+			ml: 40,
+			mb: 60,
 			data: _fetchContoursData()
 		},
 		step4: {
 			...scatterPlotDefaultProps,
-			chartType: 'scatter',
 			hidden: true,
 			data: generateScatterplotData('poisson', 200),
 			pointRadius: 8
 		},
 		step5: {
 			...scatterPlotDefaultProps,
-			chartType: 'scatter',
 			data: generateScatterplotData('poisson', 100),
 			pointRadius: 15
 		},
 		step6: {
 			...scatterPlotDefaultProps,
-			chartType: 'scatter',
 			data: generateScatterplotData('normal', 200),
 			pointRadius: 8
 		},
 		step7: {
 			...scatterPlotDefaultProps,
-			chartType: 'scatter',
 			data: generateScatterplotData('poisson', 400),
 			pointRadius: 1
 		}
@@ -80,21 +80,14 @@
 		<DataStoryWrapper bind:activeStep>
 			<div slot="chart">
 				{#if activeConfig?.chartType === 'scatter'}
-					<div transition:fade class="fixed inset-0 top-12 rounded-lg transition-opacity">
-						<div class="h-full flex items-center justify-center">
-							<div class={`h-[40vh] mt-[5vh] transition-all w-[100vw] lg:w-[80vw] xl:w-[60vw]`}>
-								<Chart chart={ScatterPlot} {...activeConfig} />
-							</div>
-						</div>
-					</div>
-				{:else if activeConfig?.chartType === 'contour'}
-					<div transition:fade class="fixed inset-0 top-12 rounded-lg transition-opacity">
-						<div class="h-full flex items-center justify-center">
-							<div class={`h-[40vh] mt-[5vh] transition-all w-[100vw] lg:w-[80vw] xl:w-[60vw]`}>
-								<Chart chart={ContourChart} {...activeConfig} />
-							</div>
-						</div>
-					</div>
+					<ChartAligner>
+						<Chart chart={ScatterPlot} {...activeConfig} />
+					</ChartAligner>
+				{/if}
+				{#if activeConfig?.chartType === 'contour'}
+					<ChartAligner fullSize={activeConfig?.fullSize}>
+						<Chart chart={ContourChart} {...activeConfig} />
+					</ChartAligner>
 				{/if}
 			</div>
 			<DataStorySection name="intro">

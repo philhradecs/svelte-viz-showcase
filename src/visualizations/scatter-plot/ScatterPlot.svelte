@@ -6,7 +6,7 @@
 	import { scaleLinear } from 'd3-scale';
 	import 'd3-transition';
 
-	import type { ChartProps } from '$components/chart/Chart.svelte';
+	import type { ChartProps } from '$components/chart/ChartRoot.svelte';
 	import { schemeSpectral } from 'd3-scale-chromatic';
 
 	import { axisBottom, axisLeft } from 'd3-axis';
