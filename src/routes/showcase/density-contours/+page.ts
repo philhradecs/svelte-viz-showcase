@@ -10,5 +10,5 @@ export const _fetchContoursData = () => {
 };
 
 export const load = (() => {
-	return { chartData: _fetchContoursData(), title: "Density Contours" };
+	return { chartData: _fetchContoursData() as {x:number, y:number}[], title: "Density Contours" };
 }) satisfies PageLoad

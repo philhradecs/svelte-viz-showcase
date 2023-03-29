@@ -1,69 +1,101 @@
 <script lang="ts">
-	import Chart from '$components/chart/Chart.svelte';
+	import Chart, { type ChartProps } from '$components/chart/Chart.svelte';
 
 	import headerImage from '$assets/images/data-story-header.jpg';
 	import { generateScatterplotData } from '../showcase/scatter-plot/+page.svelte';
 	import DataStorySection from '$components/data-story/DataStorySection.svelte';
 	import DataStoryWrapper from '$components/data-story/DataStoryWrapper.svelte';
 	import ScatterPlot from '$visualizations/scatter-plot/ScatterPlot.svelte';
+	import { _fetchContoursData } from '../showcase/density-contours/+page';
+	import ContourChart from '$visualizations/contour/ContourChart.svelte';
+	import { fade } from 'svelte/transition';
 
-	const stepConfigs = [
-		{ name: 'section-1', data: generateScatterplotData('poisson', 200), pointRadius: 2 },
-		{
-			name: 'section-2',
+	const scatterPlotDefaultProps = {
+		mt: 20,
+		mr: 40,
+		mb: 30,
+		ml: 40,
+		extraConfig: {
+			xDomain: [0, 100] as number[],
+			yDomain: [0, 100] as number[]
+		}
+	} as const;
+
+	const stepsConfig = {
+		step1: {
+			...scatterPlotDefaultProps,
+			chartType: 'scatter',
+			data: generateScatterplotData('poisson', 200),
+			pointRadius: 2
+		},
+		step2: {
+			...scatterPlotDefaultProps,
+			chartType: 'scatter',
 			data: generateScatterplotData('bates', 200),
 			pointRadius: 5
 		},
-		{
-			name: 'section-3',
-			data: generateScatterplotData('normal', 200),
-			pointRadius: 1
+		step3: {
+			chartType: 'contour',
+			data: _fetchContoursData()
 		},
-		{
-			name: 'section-4',
+		step4: {
+			...scatterPlotDefaultProps,
+			chartType: 'scatter',
 			hidden: true,
 			data: generateScatterplotData('poisson', 200),
 			pointRadius: 8
 		},
-		{
-			name: 'section-5',
+		step5: {
+			...scatterPlotDefaultProps,
+			chartType: 'scatter',
 			data: generateScatterplotData('poisson', 100),
 			pointRadius: 15
 		},
-		{
-			name: 'section-6',
+		step6: {
+			...scatterPlotDefaultProps,
+			chartType: 'scatter',
 			data: generateScatterplotData('normal', 200),
 			pointRadius: 8
 		},
-		{
-			name: 'section-7',
+		step7: {
+			...scatterPlotDefaultProps,
+			chartType: 'scatter',
 			data: generateScatterplotData('poisson', 400),
 			pointRadius: 1
 		}
-	];
+	} as const;
 
-	let activeConfig: (typeof stepConfigs)[number];
+	let activeStep: keyof typeof stepsConfig | undefined;
+	let activeConfig: (typeof stepsConfig)[keyof typeof stepsConfig] | undefined;
+
+	$: {
+		if (activeStep) {
+			activeConfig = stepsConfig[activeStep];
+		}
+	}
 </script>
 
 <div class="mt-8 mb-8">
 	<div class="container mx-auto max-w-4xl px-5 leading-relaxed md:text-lg">
-		<DataStoryWrapper {stepConfigs} bind:activeConfig>
+		<DataStoryWrapper bind:activeStep>
 			<div slot="chart">
-				<div class={`h-[40vh] mt-[5vh] transition-all w-[100vw] lg:w-[80vw] xl:w-[60vw]`}>
-					<Chart
-						mt={20}
-						mr={40}
-						mb={30}
-						ml={40}
-						chart={ScatterPlot}
-						data={activeConfig.data || []}
-						extraConfig={{
-							xDomain: [0, 100],
-							yDomain: [0, 100],
-							pointRadius: activeConfig.pointRadius
-						}}
-					/>
-				</div>
+				{#if activeConfig?.chartType === 'scatter'}
+					<div transition:fade class="fixed inset-0 top-12 rounded-lg transition-opacity">
+						<div class="h-full flex items-center justify-center">
+							<div class={`h-[40vh] mt-[5vh] transition-all w-[100vw] lg:w-[80vw] xl:w-[60vw]`}>
+								<Chart chart={ScatterPlot} {...activeConfig} />
+							</div>
+						</div>
+					</div>
+				{:else if activeConfig?.chartType === 'contour'}
+					<div transition:fade class="fixed inset-0 top-12 rounded-lg transition-opacity">
+						<div class="h-full flex items-center justify-center">
+							<div class={`h-[40vh] mt-[5vh] transition-all w-[100vw] lg:w-[80vw] xl:w-[60vw]`}>
+								<Chart chart={ContourChart} {...activeConfig} />
+							</div>
+						</div>
+					</div>
+				{/if}
 			</div>
 			<DataStorySection name="intro">
 				<div>
@@ -91,7 +123,7 @@
 				</div>
 			</DataStorySection>
 
-			<DataStorySection name="section-1" class="mb-[60vh]">
+			<DataStorySection name="step1" class="mb-[60vh]">
 				<h2>Section 1</h2>
 				The call was a hoarse, urgent whisper, and the youngster bounded to the open window. Slim wasn't
 				his real name, but the new friend he had met the day before had needed only one look at his slight
@@ -101,7 +133,7 @@
 				make their appearance.
 			</DataStorySection>
 
-			<DataStorySection name="section-2" class="mb-[60vh]">
+			<DataStorySection name="step2" class="mb-[60vh]">
 				<div>
 					<h2>Section 2</h2>
 					Slim cried, "Hi, Red!" and waved cheerfully, still blinking the sleep out of himself. Red kept
@@ -110,7 +142,7 @@
 					that the grass was wet. Slim said, more softly, "What's the matter?"
 				</div>
 			</DataStorySection>
-			<DataStorySection name="section-3" class="mb-[60vh]">
+			<DataStorySection name="step3" class="mb-[60vh]">
 				<div>
 					<h2>Section 3</h2>
 					Red only waved for him to come out. Slim dressed quickly, gladly confining his morning wash
@@ -120,7 +152,7 @@
 					'Come on in or you'll catch your death of cold.'"
 				</div>
 			</DataStorySection>
-			<DataStorySection name="section-4" class="mb-[60vh]">
+			<DataStorySection name="step4" class="mb-[60vh]">
 				<div>
 					<h2>Section 4</h2>
 					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful

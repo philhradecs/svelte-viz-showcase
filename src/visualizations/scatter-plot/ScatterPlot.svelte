@@ -11,11 +11,11 @@
 
 	import { axisBottom, axisLeft } from 'd3-axis';
 	import { format } from 'd3-format';
-	import { transition } from 'd3-transition';
+	import { onMount } from 'svelte';
 
 	export let config: ChartProps<ScatterPlotData> & {
-		xDomain?: [number, number];
-		yDomain?: [number, number];
+		xDomain?: number[];
+		yDomain?: number[];
 		showGrid?: boolean;
 		pointRadius?: number;
 	};

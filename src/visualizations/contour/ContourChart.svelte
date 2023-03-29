@@ -14,8 +14,8 @@
 	import type { ChartProps } from '$components/chart/Chart.svelte';
 
 	export let config: ChartProps<ContourChartData> & {
-		xDomain?: [number, number];
-		yDomain?: [number, number];
+		xDomain?: number[];
+		yDomain?: number[];
 		bandwidth?: number;
 		threshold?: number;
 	};
