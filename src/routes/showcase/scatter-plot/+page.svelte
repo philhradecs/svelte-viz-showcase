@@ -93,7 +93,7 @@
 			mt={20}
 			chart={ScatterPlot}
 			{data}
-			extraConfig={{ pointRadius: $scatterPlotPointRadius, showGrid: $scatterPlotShowGrid }}
+			vizOptions={{ pointRadius: $scatterPlotPointRadius, showGrid: $scatterPlotShowGrid }}
 		/>
 	</div>
 </ChartLayout>

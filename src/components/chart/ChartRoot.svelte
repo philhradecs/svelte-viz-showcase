@@ -37,11 +37,11 @@
 	export let chart: T;
 
 	type ChartData = InferChartProps<T>['data'];
-	type ExtraProps = Omit<InferChartProps<T>, keyof ChartProps<any>>;
+	type VizOptions = Omit<InferChartProps<T>, keyof ChartProps<any>>;
 
 	export let data: ChartData = undefined;
 
-	export let extraConfig: ExtraProps | undefined = undefined;
+	export let vizOptions: VizOptions | undefined = undefined;
 	let className = '';
 	export { className as class };
 
@@ -77,7 +77,7 @@
 							svg: select(svgEl),
 							root: select(chartEl),
 							registerTooltip,
-							...extraConfig
+							...vizOptions
 						}}
 					/>
 				</g>
