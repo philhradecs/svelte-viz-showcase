@@ -2,11 +2,21 @@
 import type {PageLoad} from './$types'
 import { generateScatterplotData } from '../../showcase/scatter-plot/+page.svelte';
 import { _fetchContoursData } from '../../showcase/density-contours/+page';
+import { _fetchDotPlotData } from '../../showcase/dot-plot/+page';
 
 
 export const load = (() => {
 
 	const contoursData = _fetchContoursData()
+	const dotPlotData = _fetchDotPlotData()
+	const ageCategories = [...new Set(dotPlotData.map(({ age }) => age))];
+	const orderOptions = [
+		{ label: 'State', value: 'state' },
+		...ageCategories.map((age) => ({
+			label: `Age: ${age}`,
+			value: age
+		}))
+	];
 
 	const scatterPlotDefaultDomains = {
 		xDomain: [0, 100] as number[],
@@ -16,6 +26,16 @@ export const load = (() => {
 	const contourChartDefaultThreshold = {
 		threshold: 20
 	};
+
+	type StoryStepConfig = {name: string, chartType: 'scatter' | 'contour' | 'dotPlot', [x: string]: unknown}
+
+	const dotPlotSteps = ageCategories.map<StoryStepConfig>((age,idx) => ({
+		name: `dotPlot${idx+1}`,
+		chartType: 'dotPlot',
+		fullSize: true,
+		data: dotPlotData,
+		vizOptions: {order: age, orderOptions }
+	}))
 
 	const stepsConfig = [
 		{
@@ -30,6 +50,7 @@ export const load = (() => {
 			data: generateScatterplotData('bates', 200),
 			vizOptions: { ...scatterPlotDefaultDomains, pointRadius: 5 }
 		},
+		...dotPlotSteps,
 		{
 			name: 'contour1',
 			chartType: 'contour',
@@ -56,7 +77,7 @@ export const load = (() => {
 			data: generateScatterplotData('poisson', 100),
 			vizOptions: { ...scatterPlotDefaultDomains, pointRadius: 15 }
 		}
-	] satisfies {name: string, chartType: 'scatter' | 'contour', [x: string]: unknown}[];
+	] satisfies StoryStepConfig[];
 
 	return { title: 'Data Story', stepsConfig };
 }) satisfies PageLoad

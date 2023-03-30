@@ -7,6 +7,7 @@
 	import DataStoryWrapper from '$components/data-story/DataStoryWrapper.svelte';
 	import ScatterPlot from '$visualizations/scatter-plot/ScatterPlot.svelte';
 	import { _fetchContoursData } from '../../showcase/density-contours/+page';
+	import DotPlotChart from '$visualizations/dot-plot/DotPlotChart.svelte';
 	import ContourChart from '$visualizations/contour/ContourChart.svelte';
 
 	export let data;
@@ -47,6 +48,12 @@
 					{@const { chartType, name, fullSize, ...config } = activeConfig}
 					<ChartAligner fullSize={activeConfig?.fullSize}>
 						<Chart mt={10} mr={40} mb={60} ml={40} chart={ContourChart} {...config} />
+					</ChartAligner>
+				{/if}
+				{#if activeConfig?.chartType === 'dotPlot'}
+					{@const { chartType, name, fullSize, ...config } = activeConfig}
+					<ChartAligner fullSize={activeConfig?.fullSize}>
+						<Chart mt={100} mr={40} mb={60} ml={40} chart={DotPlotChart} {...config} />
 					</ChartAligner>
 				{/if}
 			</div>
@@ -96,7 +103,7 @@
 					<input type="range" bind:value={pointRadiusInput} min="{1}," max={50} />
 				</div>
 			</DataStorySection>
-			<DataStorySection name="contour1" class="mb-[60vh]">
+			<DataStorySection name="dotPlot1" class="mb-[120vh]">
 				<div>
 					<h2>Section 3</h2>
 					Red only waved for him to come out. Slim dressed quickly, gladly confining his morning wash
@@ -106,7 +113,43 @@
 					'Come on in or you'll catch your death of cold.'"
 				</div>
 			</DataStorySection>
-			<DataStorySection name="contour2" class="mb-[60vh]">
+			<DataStorySection name="dotPlot2" class="mb-[120vh]">
+				<div>
+					<h2>Section 4</h2>
+					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
+					showcaseization components and a data-driven approach to DOM manipulation. powerful showcaseization
+					components and a data-driven approach to DOM manipulation. powerful showcaseization components
+					and a data-driven approach to DOM manipulation.
+				</div>
+			</DataStorySection>
+			<DataStorySection name="dotPlot3" class="mb-[120vh]">
+				<div>
+					<h2>Section 4</h2>
+					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
+					showcaseization components and a data-driven approach to DOM manipulation. powerful showcaseization
+					components and a data-driven approach to DOM manipulation. powerful showcaseization components
+					and a data-driven approach to DOM manipulation.
+				</div>
+			</DataStorySection>
+			<DataStorySection name="dotPlot5" class="mb-[120vh]">
+				<div>
+					<h2>Section 4</h2>
+					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
+					showcaseization components and a data-driven approach to DOM manipulation. powerful showcaseization
+					components and a data-driven approach to DOM manipulation. powerful showcaseization components
+					and a data-driven approach to DOM manipulation.
+				</div>
+			</DataStorySection>
+			<DataStorySection name="dotPlot7" class="mb-[120vh]">
+				<div>
+					<h2>Section 4</h2>
+					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
+					showcaseization components and a data-driven approach to DOM manipulation. powerful showcaseization
+					components and a data-driven approach to DOM manipulation. powerful showcaseization components
+					and a data-driven approach to DOM manipulation.
+				</div>
+			</DataStorySection>
+			<DataStorySection name="dotPlot9" class="mb-[120vh]">
 				<div>
 					<h2>Section 4</h2>
 					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
@@ -116,6 +159,15 @@
 				</div>
 			</DataStorySection>
 			<DataStorySection name="scatter3" class="mb-[60vh]">
+				<div>
+					<h2>Section 5</h2>
+					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
+					showcaseization components and a data-driven approach to DOM manipulation. powerful showcaseization
+					components and a data-driven approach to DOM manipulation. powerful showcaseization components
+					and a data-driven approach to DOM manipulation.
+				</div>
+			</DataStorySection>
+			<DataStorySection name="scatter4" class="mb-[60vh]">
 				<div>
 					<h2>Section 5</h2>
 					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
