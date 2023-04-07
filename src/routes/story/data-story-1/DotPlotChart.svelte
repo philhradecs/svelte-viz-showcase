@@ -1,29 +1,26 @@
+<script lang="ts" context="module">
+	export type DotPlotData = { popPortion: number; state: string; ageCategory: string }[];
+	export type DotPlotOptions = {
+		order?: string;
+		transitionDelay?: number;
+		transitionDuration?: number;
+		highlightColor?: string;
+	};
+</script>
+
 <script lang="ts">
 	import { max, extent, map, range, InternSet, group, min, groupSort } from 'd3-array';
 	import 'd3-transition';
 	import { axisTop } from 'd3-axis';
 	import { scaleLinear, scaleOrdinal, scalePoint } from 'd3-scale';
 	import { schemeSpectral } from 'd3-scale-chromatic';
-	import drawLegend from '../utility/legend';
-
-	type DotPlotData = { population: number; state: string; age: string }[];
+	import drawLegend from '../../../visualizations/utility/legend';
 
 	import type { ChartProps } from '$components/chart/ChartRoot.svelte';
 	import { select } from 'd3-selection';
-	import { page } from '$app/stores';
 	import { format } from 'd3-format';
-	import { writable, type Writable } from 'svelte/store';
 
-	export let config: ChartProps<DotPlotData> & {
-		orderOptions?: { name: string; value: string }[];
-		order?: string;
-		transitionDelay?: number;
-		transitionDuration?: number;
-		highlightColor?: string;
-	};
-
-	const orderOptions =
-		config.orderOptions || ($page.data.orderOptions as { label: string; value: string }[]);
+	export let config: ChartProps<DotPlotData> & DotPlotOptions;
 
 	$: ({
 		data: unsortedData,
@@ -37,53 +34,22 @@
 		highlightColor = ''
 	} = config);
 
-	$: unsortedZDomain = new InternSet(map(unsortedData, (d) => d.age));
+	$: unsortedZDomain = new InternSet(map(unsortedData, (d) => d.ageCategory));
 	$: colors = schemeSpectral[unsortedZDomain.size];
 	$: colorScale = scaleOrdinal(unsortedZDomain, colors);
-
-	// let trigger = false;
-	// $: {
-	// 	if (trigger && orderOptions) {
-	// 		highlightColor;
-	// 		transitionDelay;
-	// 		transitionDuration;
-	// 		order.update((currentValue) => {
-	// 			const currentOptionIdx = orderOptions.findIndex((d) => d.value === currentValue);
-	// 			const nextOptionIdx = (currentOptionIdx + 1) % (orderOptions.length - 1);
-	// 			return orderOptions[nextOptionIdx].value;
-	// 		});
-	// 	}
-	// 	trigger = true;
-	// }
-
-	// $: data = groupSort(
-	// 	unsortedData,
-	// 	(D) => (order === 'state' ? D[0].state : -(D.find((d) => d.age === order)?.population || 0)),
-	// 	(d) => d
-	// );
-
-	// $: X = map(data, (d) => d.population);
-	// $: Y = map(data, (d) => d.state);
-	// $: Z = map(data, (d) => d.age);
-	// $: xDomain = extent(X) as any;
-	// $: yDomain = new InternSet(Y);
-	// $: zDomain = new InternSet(Z);
-	// $: I = range(X.length).filter((i) => yDomain.has(Y[i]) && zDomain.has(Z[i]));
-	// $: indexGroups = group(I, (i) => Y[i]);
-
-	// let yScalePrev: ScalePoint<string> | null = null;
 
 	$: {
 		const { width, height } = config;
 		let data = groupSort(
 			unsortedData,
-			(D) => (order === 'state' ? D[0].state : -(D.find((d) => d.age === order)?.population || 0)),
+			(D) =>
+				order === 'state' ? D[0].state : -(D.find((d) => d.ageCategory === order)?.popPortion || 0),
 			(d) => d
 		);
 
-		let X = map(data, (d) => d.population);
+		let X = map(data, (d) => d.popPortion);
 		let Y = map(data, (d) => d.state);
-		let Z = map(data, (d) => d.age);
+		let Z = map(data, (d) => d.ageCategory);
 		let xDomain = extent(X) as any;
 		let yDomain = new InternSet(Y);
 		let zDomain = new InternSet(Z);
@@ -123,7 +89,7 @@
 					.attr('y', -22)
 					.attr('fill', 'currentColor')
 					.attr('text-anchor', 'end')
-					.text('Population →')
+					.text('popPortion →')
 			);
 
 		const g = root
@@ -136,11 +102,7 @@
 			.join('g')
 			.classed('group', true);
 
-		g
-			// .sort(([stateA], [stateB]) =>
-			// 	yScalePrev ? ascending(yScalePrev(stateA), yScalePrev(stateB)) : 0
-			// )
-			.transition()
+		g.transition()
 			.attr('opacity', 0.2)
 			.each(([y], i, nodes) => {
 				select(nodes[i])

@@ -5,19 +5,23 @@
 	import headerImage from '$assets/images/data-story-header.jpg';
 	import DataStorySection from '$components/data-story/DataStorySection.svelte';
 	import DataStoryWrapper from '$components/data-story/DataStoryWrapper.svelte';
-	import ScatterPlot from '$visualizations/scatter-plot/ScatterPlot.svelte';
-	import { _fetchContoursData } from '../../showcase/density-contours/+page';
-	import DotPlotChart from '$visualizations/dot-plot/DotPlotChart.svelte';
-	import ContourChart from '$visualizations/contour/ContourChart.svelte';
+	import ScatterPlot from './ScatterPlot.svelte';
+	import DotPlotChart from './DotPlotChart.svelte';
+	import type { StoryStepConfig } from './+page.server';
 
 	export let data;
 
-	let activeStep: (typeof data.stepsConfig)[number]['name'] | undefined;
-	let activeConfig: (typeof data.stepsConfig)[number] | undefined;
+	let activeStep: keyof typeof data.stepsConfig | undefined;
+	let activeConfig: StoryStepConfig | undefined;
+
+	const Step = Object.fromEntries(Object.keys(data.stepsConfig).map((key) => [key, key])) as Record<
+		keyof typeof data.stepsConfig,
+		string
+	>;
 
 	$: {
 		if (activeStep) {
-			activeConfig = data.stepsConfig.find((d) => d.name === activeStep);
+			activeConfig = data.stepsConfig[activeStep];
 		}
 	}
 
@@ -29,7 +33,7 @@
 		<DataStoryWrapper bind:activeStep>
 			<div slot="chart">
 				{#if activeConfig?.chartType === 'scatter'}
-					{@const { chartType, name, vizOptions, fullSize, ...config } = activeConfig}
+					{@const { chartType, vizOptions, ...config } = activeConfig}
 					<ChartAligner>
 						<Chart
 							mt={20}
@@ -38,20 +42,14 @@
 							ml={40}
 							chart={ScatterPlot}
 							{...config}
-							vizOptions={name === 'scatter2'
+							vizOptions={activeStep === 'scatter4'
 								? { ...vizOptions, pointRadius: pointRadiusInput }
 								: vizOptions}
 						/>
 					</ChartAligner>
 				{/if}
-				{#if activeConfig?.chartType === 'contour'}
-					{@const { chartType, name, fullSize, ...config } = activeConfig}
-					<ChartAligner fullSize={activeConfig?.fullSize}>
-						<Chart mt={10} mr={40} mb={60} ml={40} chart={ContourChart} {...config} />
-					</ChartAligner>
-				{/if}
 				{#if activeConfig?.chartType === 'dotPlot'}
-					{@const { chartType, name, fullSize, ...config } = activeConfig}
+					{@const { chartType, fullSize, ...config } = activeConfig}
 					<ChartAligner fullSize={activeConfig?.fullSize}>
 						<Chart mt={100} mr={40} mb={60} ml={40} chart={DotPlotChart} {...config} />
 					</ChartAligner>
@@ -83,7 +81,7 @@
 				</div>
 			</DataStorySection>
 
-			<DataStorySection name="scatter1" class="mb-[60vh]">
+			<DataStorySection name={Step.scatter1} class="mb-[60vh]">
 				<h2>Section 1</h2>
 				The call was a hoarse, urgent whisper, and the youngster bounded to the open window. Slim wasn't
 				his real name, but the new friend he had met the day before had needed only one look at his slight
@@ -93,17 +91,25 @@
 				make their appearance.
 			</DataStorySection>
 
-			<DataStorySection name="scatter2" class="mb-[60vh]">
+			<DataStorySection name={Step.scatter2} class="mb-[60vh]">
 				<div>
 					<h2>Section 2</h2>
 					Slim cried, "Hi, Red!" and waved cheerfully, still blinking the sleep out of himself. Red kept
 					to his croaking whisper, "Quiet! You want to wake somebody?" Slim noticed all at once that
 					the sun scarcely topped the low hills in the east, that the shadows were long and soft, and
 					that the grass was wet. Slim said, more softly, "What's the matter?"
-					<input type="range" bind:value={pointRadiusInput} min="{1}," max={50} />
 				</div>
 			</DataStorySection>
-			<DataStorySection name="dotPlot1" class="mb-[120vh]">
+			<DataStorySection name={Step.scatter3} class="mb-[60vh]">
+				<div>
+					<h2>Section 5</h2>
+					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
+					showcaseization components and a data-driven approach to DOM manipulation. powerful showcaseization
+					components and a data-driven approach to DOM manipulation. powerful showcaseization components
+					and a data-driven approach to DOM manipulation.
+				</div>
+			</DataStorySection>
+			<DataStorySection name={Step.dotPlotAge1} class="mb-[120vh]">
 				<div>
 					<h2>Section 3</h2>
 					Red only waved for him to come out. Slim dressed quickly, gladly confining his morning wash
@@ -113,7 +119,7 @@
 					'Come on in or you'll catch your death of cold.'"
 				</div>
 			</DataStorySection>
-			<DataStorySection name="dotPlot2" class="mb-[120vh]">
+			<DataStorySection name={Step.dotPlotAge4} class="mb-[120vh]">
 				<div>
 					<h2>Section 4</h2>
 					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
@@ -122,7 +128,7 @@
 					and a data-driven approach to DOM manipulation.
 				</div>
 			</DataStorySection>
-			<DataStorySection name="dotPlot3" class="mb-[120vh]">
+			<DataStorySection name={Step.dotPlotAge6} class="mb-[120vh]">
 				<div>
 					<h2>Section 4</h2>
 					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
@@ -131,49 +137,14 @@
 					and a data-driven approach to DOM manipulation.
 				</div>
 			</DataStorySection>
-			<DataStorySection name="dotPlot5" class="mb-[120vh]">
-				<div>
-					<h2>Section 4</h2>
-					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
-					showcaseization components and a data-driven approach to DOM manipulation. powerful showcaseization
-					components and a data-driven approach to DOM manipulation. powerful showcaseization components
-					and a data-driven approach to DOM manipulation.
-				</div>
-			</DataStorySection>
-			<DataStorySection name="dotPlot7" class="mb-[120vh]">
-				<div>
-					<h2>Section 4</h2>
-					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
-					showcaseization components and a data-driven approach to DOM manipulation. powerful showcaseization
-					components and a data-driven approach to DOM manipulation. powerful showcaseization components
-					and a data-driven approach to DOM manipulation.
-				</div>
-			</DataStorySection>
-			<DataStorySection name="dotPlot9" class="mb-[120vh]">
-				<div>
-					<h2>Section 4</h2>
-					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
-					showcaseization components and a data-driven approach to DOM manipulation. powerful showcaseization
-					components and a data-driven approach to DOM manipulation. powerful showcaseization components
-					and a data-driven approach to DOM manipulation.
-				</div>
-			</DataStorySection>
-			<DataStorySection name="scatter3" class="mb-[60vh]">
+			<DataStorySection name={Step.scatter4} class="mb-[60vh]">
 				<div>
 					<h2>Section 5</h2>
 					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
 					showcaseization components and a data-driven approach to DOM manipulation. powerful showcaseization
 					components and a data-driven approach to DOM manipulation. powerful showcaseization components
 					and a data-driven approach to DOM manipulation.
-				</div>
-			</DataStorySection>
-			<DataStorySection name="scatter4" class="mb-[60vh]">
-				<div>
-					<h2>Section 5</h2>
-					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
-					showcaseization components and a data-driven approach to DOM manipulation. powerful showcaseization
-					components and a data-driven approach to DOM manipulation. powerful showcaseization components
-					and a data-driven approach to DOM manipulation.
+					<input type="range" bind:value={pointRadiusInput} min={1} max={50} />
 				</div>
 			</DataStorySection>
 

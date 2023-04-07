@@ -1,5 +1,11 @@
 <script lang="ts" context="module">
 	export type ScatterPlotData = [x: number, y: number][];
+	export type ScatterPlotOptions = {
+		xDomain?: number[];
+		yDomain?: number[];
+		showGrid?: boolean;
+		pointRadius?: number;
+	};
 </script>
 
 <script lang="ts">
@@ -11,14 +17,8 @@
 
 	import { axisBottom, axisLeft } from 'd3-axis';
 	import { format } from 'd3-format';
-	import { onMount } from 'svelte';
 
-	export let config: ChartProps<ScatterPlotData> & {
-		xDomain?: number[];
-		yDomain?: number[];
-		showGrid?: boolean;
-		pointRadius?: number;
-	};
+	export let config: ChartProps<ScatterPlotData> & ScatterPlotOptions;
 
 	$: ({ root, registerTooltip, height, width, data, showGrid, pointRadius = 5 } = config);
 
@@ -71,6 +71,7 @@
 				(exit) => exit.transition().style('opacity', 0).remove()
 			)
 			.transition()
+			.duration(400)
 			.attr('r', pointRadius)
 			.attr('cx', (d) => xScale(d[0]))
 			.attr('cy', (d) => yScale(d[1]))

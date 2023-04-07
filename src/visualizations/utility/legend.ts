@@ -166,7 +166,7 @@ export default function drawLegend(
 				.attr('height', height - marginTop - marginBottom)
 				.attr('fill', color)
 				.attr('stroke', (d) => (selected && d === selected ? 'white' : null))
-				.attr('stroke-width', 2);
+				.attr('stroke-width', 4);
 
 			if (onHover) {
 				rect.on('mouseenter', (_, d) => onHover(d)).style('cursor', 'pointer');
