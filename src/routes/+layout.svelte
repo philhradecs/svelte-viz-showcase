@@ -9,18 +9,31 @@
 	const defaultHeaderLinks = [{ label: 'About', link: 'about' }];
 </script>
 
-<div class="flex flex-col min-h-screen">
-	<nav class="sticky top-0 left-0 z-20 bg-primary/95 backdrop-blur-sm">
-		<Header title={$page.data.title} links={$page.data.links || defaultHeaderLinks} />
-	</nav>
+<div>
+	<Header title={$page.data.title} links={$page.data.links || defaultHeaderLinks} />
 
-	{#if $navigating}
-		<div class="grow flex justify-center items-center">
-			<PageLoading />
-		</div>
-	{:else}
-		<main class="grow flex">
-			<div class="flex-1"><slot /></div>
-		</main>
-	{/if}
+	<main>
+		<slot />
+	</main>
 </div>
+
+<style lang="postcss">
+	:global(html) {
+		height: 100%;
+		/* scroll-behavior: smooth; */
+		background-color: theme('colors.gray.900');
+		color: theme('colors.gray.200');
+	}
+
+	:global(h1) {
+		font-size: theme('fontSize.3xl');
+		font-weight: bold;
+	}
+	:global(h2) {
+		font-size: theme('fontSize.2xl');
+		font-weight: bold;
+	}
+	:global(h3) {
+		font-size: theme('fontSize.xl');
+	}
+</style>

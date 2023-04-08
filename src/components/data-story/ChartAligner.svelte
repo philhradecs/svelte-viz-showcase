@@ -8,7 +8,7 @@
 	<div class="h-full flex items-center justify-center">
 		<div
 			class={`transition-all ${
-				fullSize ? 'w-[100vw] h-full' : 'lg:w-[80vw] xl:w-[60vw] h-[40vh]'
+				fullSize ? 'w-[100vw] h-full' : 'lg:w-[80vw] xl:w-[60vw] h-[50vh]'
 			}  mt-[5vh] w-[100vw] `}
 		>
 			<slot />

@@ -7,21 +7,16 @@
 	import DataStoryWrapper from '$components/data-story/DataStoryWrapper.svelte';
 	import ScatterPlot from './ScatterPlot.svelte';
 	import DotPlotChart from './DotPlotChart.svelte';
-	import type { StoryStepConfig } from './+page.server';
+	import type { StoryStepConfig } from './+page';
 
 	export let data;
 
-	let activeStep: keyof typeof data.stepsConfig | undefined;
+	let activeStep: string | undefined;
 	let activeConfig: StoryStepConfig | undefined;
 
-	const Step = Object.fromEntries(Object.keys(data.stepsConfig).map((key) => [key, key])) as Record<
-		keyof typeof data.stepsConfig,
-		string
-	>;
-
 	$: {
-		if (activeStep) {
-			activeConfig = data.stepsConfig[activeStep];
+		if (activeStep && activeStep !== activeConfig?.id) {
+			activeConfig = data.stepsConfig.find((d) => d.id === activeStep);
 		}
 	}
 
@@ -29,33 +24,57 @@
 </script>
 
 <div class="mt-8 mb-8">
+	<div class="fixed left-4 top-[20%] z-30 hidden xl:block">
+		{#each data.stepsConfig as step (step.id)}
+			{#if !activeConfig?.fullSize}
+				<a
+					class="block mb-2 px-2 py-1 text-sm rounded-sm text-white"
+					href={`#${step.id}`}
+					class:font-bold={activeConfig?.id === step.id}
+					class:bg-cyan-900={activeConfig?.id === step.id}
+				>
+					{step.title}
+				</a>
+			{/if}
+		{/each}
+	</div>
 	<div class="container mx-auto max-w-4xl px-5 leading-relaxed md:text-lg">
 		<DataStoryWrapper bind:activeStep>
 			<div slot="chart">
 				{#if activeConfig?.chartType === 'scatter'}
-					{@const { chartType, vizOptions, ...config } = activeConfig}
+					{@const { vizOptions, data, interactivePointRadius, chartTitle } = activeConfig}
 					<ChartAligner>
-						<Chart
-							mt={20}
-							mr={40}
-							mb={30}
-							ml={40}
-							chart={ScatterPlot}
-							{...config}
-							vizOptions={activeStep === 'scatter4'
-								? { ...vizOptions, pointRadius: pointRadiusInput }
-								: vizOptions}
-						/>
+						<figure class="h-full relative">
+							{#if chartTitle}
+								<figcaption
+									class="absolute bottom-[100%] w-full text-center text-gray-300 font-mono"
+								>
+									{@html chartTitle}
+								</figcaption>
+							{/if}
+							<Chart
+								mt={20}
+								mr={40}
+								mb={30}
+								ml={40}
+								chart={ScatterPlot}
+								{data}
+								vizOptions={interactivePointRadius
+									? { ...vizOptions, pointRadius: pointRadiusInput }
+									: vizOptions}
+							/>
+						</figure>
 					</ChartAligner>
 				{/if}
 				{#if activeConfig?.chartType === 'dotPlot'}
-					{@const { chartType, fullSize, ...config } = activeConfig}
-					<ChartAligner fullSize={activeConfig?.fullSize}>
-						<Chart mt={100} mr={40} mb={60} ml={40} chart={DotPlotChart} {...config} />
+					{@const { fullSize, data, vizOptions } = activeConfig}
+					<ChartAligner {fullSize}>
+						<Chart mt={100} mr={40} mb={60} ml={40} chart={DotPlotChart} {data} {vizOptions} />
 					</ChartAligner>
 				{/if}
 			</div>
-			<DataStorySection name="intro">
+
+			<DataStorySection id="intro" class="pb-[20vh]">
 				<div>
 					<img
 						src={headerImage}
@@ -81,7 +100,7 @@
 				</div>
 			</DataStorySection>
 
-			<DataStorySection name={Step.scatter1} class="mb-[60vh]">
+			<DataStorySection id="scatter1" class="pb-[40vh]">
 				<h2>Section 1</h2>
 				The call was a hoarse, urgent whisper, and the youngster bounded to the open window. Slim wasn't
 				his real name, but the new friend he had met the day before had needed only one look at his slight
@@ -91,16 +110,16 @@
 				make their appearance.
 			</DataStorySection>
 
-			<DataStorySection name={Step.scatter2} class="mb-[60vh]">
-				<div>
+			<DataStorySection id="scatter2" class="pb-[120vh]">
+				<!-- <div>
 					<h2>Section 2</h2>
 					Slim cried, "Hi, Red!" and waved cheerfully, still blinking the sleep out of himself. Red kept
 					to his croaking whisper, "Quiet! You want to wake somebody?" Slim noticed all at once that
 					the sun scarcely topped the low hills in the east, that the shadows were long and soft, and
 					that the grass was wet. Slim said, more softly, "What's the matter?"
-				</div>
+				</div> -->
 			</DataStorySection>
-			<DataStorySection name={Step.scatter3} class="mb-[60vh]">
+			<DataStorySection id="scatterZoom1" class="pb-[80vh]">
 				<div>
 					<h2>Section 5</h2>
 					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
@@ -109,7 +128,25 @@
 					and a data-driven approach to DOM manipulation.
 				</div>
 			</DataStorySection>
-			<DataStorySection name={Step.dotPlotAge1} class="mb-[120vh]">
+			<DataStorySection id="scatterZoom2" class="pb-[80vh]">
+				<div>
+					<h2>Section 5</h2>
+					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
+					showcaseization components and a data-driven approach to DOM manipulation. powerful showcaseization
+					components and a data-driven approach to DOM manipulation. powerful showcaseization components
+					and a data-driven approach to DOM manipulation.
+				</div>
+			</DataStorySection>
+			<DataStorySection id="scatter3" class="pb-[80vh]">
+				<div>
+					<h2>Section 2</h2>
+					Slim cried, "Hi, Red!" and waved cheerfully, still blinking the sleep out of himself. Red kept
+					to his croaking whisper, "Quiet! You want to wake somebody?" Slim noticed all at once that
+					the sun scarcely topped the low hills in the east, that the shadows were long and soft, and
+					that the grass was wet. Slim said, more softly, "What's the matter?"
+				</div>
+			</DataStorySection>
+			<DataStorySection id="dotPlotAge1" class="pb-[120vh]">
 				<div>
 					<h2>Section 3</h2>
 					Red only waved for him to come out. Slim dressed quickly, gladly confining his morning wash
@@ -119,7 +156,7 @@
 					'Come on in or you'll catch your death of cold.'"
 				</div>
 			</DataStorySection>
-			<DataStorySection name={Step.dotPlotAge4} class="mb-[120vh]">
+			<DataStorySection id="dotPlotAge4" class="pb-[120vh]">
 				<div>
 					<h2>Section 4</h2>
 					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
@@ -128,7 +165,7 @@
 					and a data-driven approach to DOM manipulation.
 				</div>
 			</DataStorySection>
-			<DataStorySection name={Step.dotPlotAge6} class="mb-[120vh]">
+			<DataStorySection id="dotPlotAge6" class="pb-[120vh]">
 				<div>
 					<h2>Section 4</h2>
 					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
@@ -137,7 +174,7 @@
 					and a data-driven approach to DOM manipulation.
 				</div>
 			</DataStorySection>
-			<DataStorySection name={Step.scatter4} class="mb-[60vh]">
+			<DataStorySection id="scatter4" class="pb-[80vh]">
 				<div>
 					<h2>Section 5</h2>
 					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
@@ -145,6 +182,15 @@
 					components and a data-driven approach to DOM manipulation. powerful showcaseization components
 					and a data-driven approach to DOM manipulation.
 					<input type="range" bind:value={pointRadiusInput} min={1} max={50} />
+				</div>
+			</DataStorySection>
+			<DataStorySection id="scatter5" class="pb-[80vh]">
+				<div>
+					<h2>Section 5</h2>
+					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
+					showcaseization components and a data-driven approach to DOM manipulation. powerful showcaseization
+					components and a data-driven approach to DOM manipulation. powerful showcaseization components
+					and a data-driven approach to DOM manipulation.
 				</div>
 			</DataStorySection>
 

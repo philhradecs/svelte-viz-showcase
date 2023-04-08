@@ -6,7 +6,9 @@
 	export let links: { label: string; link: string }[] = [];
 </script>
 
-<div class="p-4 h-12 flex justify-around items-center py-3 border-b border-b-gray-800">
+<header
+	class="sticky top-0 z-20 bg-gray-900/95 backdrop-blur-sm p-4 py-3 h-12 flex justify-around items-center border-b border-b-gray-800"
+>
 	<a href="/">
 		<AppLogo size={24} />
 	</a>
@@ -14,14 +16,14 @@
 		{#if title}
 			<div class="text-xl tracking-wider text-gray-200">{title}</div>
 		{:else}
-			<div class="text-cyan-600 text tracking-wider">
+			<nav class="text-cyan-600 text tracking-wider">
 				{#each links as { label, link }}
 					<a href={link}>{label}</a>
 				{/each}
-			</div>
+			</nav>
 		{/if}
 	</div>
 	<a href="https://github.com" target="_blank" rel="noreferrer" class="hover:text-highlight-rose">
 		<LogoGithub size={24} />
 	</a>
-</div>
+</header>

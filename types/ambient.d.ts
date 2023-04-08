@@ -1,1 +1,1 @@
-declare module '*.tsv';
+/// <reference types="vite/client" />
