@@ -1,11 +1,18 @@
 <script lang="ts">
-	export let name: string;
+	export let id: string | number;
 	let className: string = '';
 	export { className as class };
+	let hasContent = $$slots.default;
 </script>
 
-<section data-scrolly-section={name} class={`relative z-10 ${className}`}>
-	<div class="bg-primary/90 backdrop-blur-sm -mx-5 px-5 py-6">
-		<slot />
-	</div>
+<section
+	id={String(id)}
+	data-scrolly-section={id}
+	class={`relative z-10 target:scroll-mt-32 ${className} pointer-events-auto`}
+>
+	{#if hasContent}
+		<div class="bg-gray-900/70 backdrop-blur-md -mx-5 px-5 py-6">
+			<slot />
+		</div>
+	{/if}
 </section>

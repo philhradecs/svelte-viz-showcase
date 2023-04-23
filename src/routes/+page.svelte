@@ -24,7 +24,7 @@
 			<IconLink title="Dashboard" link="dashboard" icon={Dashboard} />
 		</div>
 		<div class="self-start mb-2 lg:mb-0">
-			<IconLink title="Data Story" link="data-story" icon={DataRefinery} />
+			<IconLink title="Data Story" link="story/data-story-1" icon={DataRefinery} />
 		</div>
 
 		<hr class="col-span-full lg:hidden border-gray-800 mb-4" />
