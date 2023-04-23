@@ -11,7 +11,7 @@
 	class={`relative z-10 target:scroll-mt-32 ${className} pointer-events-auto`}
 >
 	{#if hasContent}
-		<div class="bg-gray-900/70 backdrop-blur-md -mx-5 px-5 py-6">
+		<div class="bg-primary/70 backdrop-blur-md -mx-5 px-5 py-6">
 			<slot />
 		</div>
 	{/if}

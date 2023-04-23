@@ -2,15 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+	--text-primary: #e8e8e8;
+	--text-secondary: #b19f9e;
+	--bg-primary: 25 24 26;
+	--highlight-green: #479761;
+	--highlight-yellow: #cebc81;
+	--highlight-rose: #a16e83;
+}
+
 @layer base {
-	:root {
-		--text-primary: #e8e8e8;
-		--text-secondary: #b19f9e;
-		--bg-primary: 25 24 26;
-		--highlight-green: #479761;
-		--highlight-yellow: #cebc81;
-		--highlight-rose: #a16e83;
-	}
 
 	html {
 		height: 100%;
