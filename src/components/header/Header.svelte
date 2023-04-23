@@ -7,7 +7,7 @@
 </script>
 
 <header
-	class="sticky top-0 z-20 bg-gray-900/95 backdrop-blur-sm p-4 py-3 h-12 flex justify-around items-center border-b border-b-gray-800"
+	class="sticky top-0 z-20 bg-primary backdrop-blur-sm p-4 py-3 h-12 flex justify-around items-center border-b border-b-gray-800"
 >
 	<a href="/">
 		<AppLogo size={24} />

@@ -26,8 +26,11 @@ import { scaleLinear } from 'd3-scale';
 		const scaleToRange = scaleLinear()
 			.range([0, 100])
 			.domain([min([minX, minY]) || 0, max([maxX, maxY]) || 0]);
-		const scaledX = X.map(scaleToRange);
-		const scaledY = Y.map(scaleToRange);
 
-		return zip(scaledX, scaledY) as [x: number, y: number][];
+		const data = Array.from({length: numPoints}, (_, i) => ({
+			x: scaleToRange(X[i]),
+			y: scaleToRange(Y[i])
+		}));
+
+		return data
 	}

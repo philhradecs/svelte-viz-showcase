@@ -12,7 +12,7 @@
 <div>
 	<Header title={$page.data.title} links={$page.data.links || defaultHeaderLinks} />
 
-	<main>
+	<main class="relative">
 		{#if $navigating}
 			<PageLoading />
 		{:else}

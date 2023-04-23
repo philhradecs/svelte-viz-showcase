@@ -29,7 +29,7 @@ export const load = (async () => {
 	const { ageCategories, dotPlotData } = getDotPlotData();
 	// const scatterPoisson200 = generateScatterplotData('poisson', 200);
 	// const scatterBates300 = generateScatterplotData('bates', 300);
-	// const scatterPoison100 = generateScatterplotData('poisson', 100);
+	const scatterPoison100 = generateScatterplotData('poisson', 100);
 
 	const pulizterData = preparePulitzerData();
 
@@ -70,16 +70,16 @@ export const load = (async () => {
 			id: 'scatter2',
 			title: 'Scatter Plot 2',
 			chartTitle:
-				'Pulitzer Price Winners and Finalists <strong>2004 - 2013</strong><br>Daily Circulation <strong>2014</strong>',
+			'Pulitzer Price Winners and Finalists <strong>2004 - 2013</strong><br>Daily Circulation <strong>2014</strong>',
 			chartType: 'scatter',
 			data: pulitzerScatter2013,
 			vizOptions: { ...scatterPlotDefaultOptions, pointRadius: 4, showGrid: true }
 		},
 		{
-			id: 'scatterZoom1',
-			title: 'Scatter Plot Zoom 1',
+			id: 'scatterZoom2',
+			title: 'Scatter Plot Zoom 2',
 			chartType: 'scatter',
-			data: pulitzerScatter2004,
+			data: pulitzerScatter2013,
 			vizOptions: {
 				...scatterPlotDefaultOptions,
 				xDomain: [0, maxCirculation / 3],
@@ -88,10 +88,10 @@ export const load = (async () => {
 			}
 		},
 		{
-			id: 'scatterZoom2',
-			title: 'Scatter Plot Zoom 2',
+			id: 'scatterZoom1',
+			title: 'Scatter Plot Zoom 1',
 			chartType: 'scatter',
-			data: pulitzerScatter2013,
+			data: pulitzerScatter2004,
 			vizOptions: {
 				...scatterPlotDefaultOptions,
 				xDomain: [0, maxCirculation / 3],
@@ -129,7 +129,19 @@ export const load = (async () => {
 			fullSize: true,
 			data: dotPlotData,
 			vizOptions: { ...dotPlotDefaultOptions, order: ageCategories[5] }
-		}
+		},
+		{
+			id: 'scatterZoom3',
+			title: 'Scatter Plot Zoom 3',
+			chartType: 'scatter',
+			data: pulitzerScatter2013,
+			vizOptions: {
+				...scatterPlotDefaultOptions,
+				xDomain: [0, maxCirculation / 3],
+				yDomain: [0, maxWinners / 3],
+				pointRadius: 5
+			}
+		},
 		// {
 		// 	id: 'scatter4',
 		// 	title: 'Scatter Plot 4',
