@@ -2,7 +2,6 @@ import type { PageLoad } from './$types';
 import type { ScatterPlotData, ScatterPlotOptions } from './ScatterPlot.svelte';
 import type { DotPlotData, DotPlotOptions } from './DotPlotChart.svelte';
 
-import { generateScatterplotData } from './generate-scatterplot-data';
 import { getDotPlotData } from './prepare-dot-plot-data';
 import { preparePulitzerData } from './prepare-scatter-data';
 import { max } from 'd3-array';
@@ -29,7 +28,7 @@ export const load = (async () => {
 	const { ageCategories, dotPlotData } = getDotPlotData();
 	// const scatterPoisson200 = generateScatterplotData('poisson', 200);
 	// const scatterBates300 = generateScatterplotData('bates', 300);
-	const scatterPoison100 = generateScatterplotData('poisson', 100);
+	// const scatterPoison100 = generateScatterplotData('poisson', 100);
 
 	const pulizterData = preparePulitzerData();
 

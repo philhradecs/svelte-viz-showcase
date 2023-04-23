@@ -12,9 +12,9 @@
 <div>
 	<Header title={$page.data.title} links={$page.data.links || defaultHeaderLinks} />
 
-	<main class="relative">
+	<main>
 		{#if $navigating}
-			<PageLoading />
+			<div class="flex justify-center mt-[30vh]"><PageLoading /></div>
 		{:else}
 			<slot />
 		{/if}
