@@ -15,6 +15,7 @@ export const getRegisterTooltip = (parent: Element): RegisterTooltipFn => {
 				delegate(parent, {
 					target: selector,
 					followCursor: true,
+					delay: [100, 0],
 					plugins: [followCursor],
 					...options
 				})

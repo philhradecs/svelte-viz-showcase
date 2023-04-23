@@ -64,7 +64,7 @@ export const load = (async () => {
 				'Pulitzer Price Winners and Finalists <strong>1990 - 2003</strong><br>Daily Circulation <strong>2004</strong>',
 			chartType: 'scatter',
 			data: pulitzerScatter2004,
-			vizOptions: { ...scatterPlotDefaultOptions, pointRadius: 4, showGrid: true }
+			vizOptions: { ...scatterPlotDefaultOptions, pointRadius: 4 }
 		},
 		{
 			id: 'scatter2',
@@ -73,19 +73,7 @@ export const load = (async () => {
 				'Pulitzer Price Winners and Finalists <strong>2004 - 2013</strong><br>Daily Circulation <strong>2014</strong>',
 			chartType: 'scatter',
 			data: pulitzerScatter2013,
-			vizOptions: { ...scatterPlotDefaultOptions, pointRadius: 4, showGrid: true }
-		},
-		{
-			id: 'scatterZoom1',
-			title: 'Scatter Plot Zoom 1',
-			chartType: 'scatter',
-			data: pulitzerScatter2004,
-			vizOptions: {
-				...scatterPlotDefaultOptions,
-				xDomain: [0, maxCirculation / 3],
-				yDomain: [0, maxWinners / 3],
-				pointRadius: 5
-			}
+			vizOptions: { ...scatterPlotDefaultOptions, pointRadius: 4 }
 		},
 		{
 			id: 'scatterZoom2',
@@ -96,7 +84,21 @@ export const load = (async () => {
 				...scatterPlotDefaultOptions,
 				xDomain: [0, maxCirculation / 3],
 				yDomain: [0, maxWinners / 3],
-				pointRadius: 5
+				pointRadius: 5,
+				showGrid: true
+			}
+		},
+		{
+			id: 'scatterZoom1',
+			title: 'Scatter Plot Zoom 1',
+			chartType: 'scatter',
+			data: pulitzerScatter2004,
+			vizOptions: {
+				...scatterPlotDefaultOptions,
+				xDomain: [0, maxCirculation / 3],
+				yDomain: [0, maxWinners / 3],
+				pointRadius: 5,
+				showGrid: true
 			}
 		},
 		// {

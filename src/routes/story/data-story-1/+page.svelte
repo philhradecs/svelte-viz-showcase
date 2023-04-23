@@ -5,7 +5,7 @@
 	import headerImage from '$assets/images/data-story-header.jpg';
 	import DataStorySection from '$components/data-story/DataStorySection.svelte';
 	import DataStoryWrapper from '$components/data-story/DataStoryWrapper.svelte';
-	import ScatterPlot from './ScatterPlot.svelte';
+	import ScatterPlotSvelte from './ScatterPlotSvelte.svelte';
 	import DotPlotChart from './DotPlotChart.svelte';
 	import type { StoryStepConfig } from './+page';
 
@@ -57,7 +57,7 @@
 								mr={40}
 								mb={30}
 								ml={40}
-								chart={ScatterPlot}
+								chart={ScatterPlotSvelte}
 								{data}
 								vizOptions={interactivePointRadius
 									? { ...vizOptions, pointRadius: pointRadiusInput }
@@ -74,7 +74,7 @@
 				{/if}
 			</div>
 
-			<DataStorySection id="intro" class="pb-[20vh]">
+			<DataStorySection id="intro" class="mb-[20vh]">
 				<div>
 					<img
 						src={headerImage}
@@ -100,7 +100,7 @@
 				</div>
 			</DataStorySection>
 
-			<DataStorySection id="scatter1" class="pb-[40vh]">
+			<DataStorySection id="scatter1" class="mb-[40vh]">
 				<h2>Section 1</h2>
 				The call was a hoarse, urgent whisper, and the youngster bounded to the open window. Slim wasn't
 				his real name, but the new friend he had met the day before had needed only one look at his slight
@@ -110,7 +110,7 @@
 				make their appearance.
 			</DataStorySection>
 
-			<DataStorySection id="scatter2" class="pb-[120vh]">
+			<DataStorySection id="scatter2" class="mb-[120vh]">
 				<!-- <div>
 					<h2>Section 2</h2>
 					Slim cried, "Hi, Red!" and waved cheerfully, still blinking the sleep out of himself. Red kept
@@ -119,7 +119,7 @@
 					that the grass was wet. Slim said, more softly, "What's the matter?"
 				</div> -->
 			</DataStorySection>
-			<DataStorySection id="scatterZoom1" class="pb-[80vh]">
+			<DataStorySection id="scatterZoom2" class="mb-[80vh]">
 				<div>
 					<h2>Section 5</h2>
 					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
@@ -128,7 +128,7 @@
 					and a data-driven approach to DOM manipulation.
 				</div>
 			</DataStorySection>
-			<DataStorySection id="scatterZoom2" class="pb-[80vh]">
+			<DataStorySection id="scatterZoom1" class="mb-[80vh]">
 				<div>
 					<h2>Section 5</h2>
 					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
@@ -137,7 +137,7 @@
 					and a data-driven approach to DOM manipulation.
 				</div>
 			</DataStorySection>
-			<DataStorySection id="scatter3" class="pb-[80vh]">
+			<DataStorySection id="scatter3" class="mb-[80vh]">
 				<div>
 					<h2>Section 2</h2>
 					Slim cried, "Hi, Red!" and waved cheerfully, still blinking the sleep out of himself. Red kept
@@ -146,7 +146,7 @@
 					that the grass was wet. Slim said, more softly, "What's the matter?"
 				</div>
 			</DataStorySection>
-			<DataStorySection id="dotPlotAge1" class="pb-[120vh]">
+			<DataStorySection id="dotPlotAge1" class="mb-[120vh]">
 				<div>
 					<h2>Section 3</h2>
 					Red only waved for him to come out. Slim dressed quickly, gladly confining his morning wash
@@ -156,7 +156,7 @@
 					'Come on in or you'll catch your death of cold.'"
 				</div>
 			</DataStorySection>
-			<DataStorySection id="dotPlotAge4" class="pb-[120vh]">
+			<DataStorySection id="dotPlotAge4" class="mb-[120vh]">
 				<div>
 					<h2>Section 4</h2>
 					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
@@ -165,7 +165,7 @@
 					and a data-driven approach to DOM manipulation.
 				</div>
 			</DataStorySection>
-			<DataStorySection id="dotPlotAge6" class="pb-[120vh]">
+			<DataStorySection id="dotPlotAge6" class="mb-[120vh]">
 				<div>
 					<h2>Section 4</h2>
 					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
@@ -174,7 +174,7 @@
 					and a data-driven approach to DOM manipulation.
 				</div>
 			</DataStorySection>
-			<DataStorySection id="scatter4" class="pb-[80vh]">
+			<DataStorySection id="scatter4" class="mb-[80vh]">
 				<div>
 					<h2>Section 5</h2>
 					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
@@ -184,7 +184,7 @@
 					<input type="range" bind:value={pointRadiusInput} min={1} max={50} />
 				</div>
 			</DataStorySection>
-			<DataStorySection id="scatter5" class="pb-[80vh]">
+			<DataStorySection id="scatter5" class="mb-[80vh]">
 				<div>
 					<h2>Section 5</h2>
 					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful

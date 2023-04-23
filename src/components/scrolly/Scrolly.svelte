@@ -45,16 +45,15 @@
 		}
 
 		if (maxRatio > 0) {
-			value = nodes[maxIndex].dataset[camelize(dataAttributeName)];
-		} else value = undefined;
+			return nodes[maxIndex].dataset[camelize(dataAttributeName)];
+		} else return undefined;
 	};
 
 	const createObserver = (node: Element, index: number) => {
 		const handleIntersect: IntersectionObserverCallback = (e) => {
-			const intersecting = e[0].isIntersecting;
 			const ratio = e[0].intersectionRatio;
 			steps[index] = ratio;
-			mostInView();
+			value = mostInView();
 		};
 
 		const marginTop = top ? top * -1 : 0;
