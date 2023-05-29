@@ -1,8 +1,9 @@
+import { format } from 'd3-format';
 import type { PageLoad } from './$types';
-import type { ScatterPlotData, ScatterPlotOptions } from './ScatterPlot.svelte';
-import type { DotPlotData, DotPlotOptions } from './DotPlotChart.svelte';
 
-import { generateScatterplotData } from './generate-scatterplot-data';
+import type { DotPlotData, DotPlotOptions } from './DotPlotChart.svelte';
+import type { ScatterPlotData, ScatterPlotOptions, ScatterPlotPoint } from './ScatterPlot.svelte';
+
 import { getDotPlotData } from './prepare-dot-plot-data';
 import { preparePulitzerData } from './prepare-scatter-data';
 import { max } from 'd3-array';
@@ -15,9 +16,13 @@ type StoryStepOptions = {
 	chartTitle?: string;
 	fullSize?: boolean;
 };
+type PulitzerScatterPoint = ScatterPlotPoint & {
+	meta: { circulationYear: string; pulitzerPeriod: string };
+};
+
 type ScatterPlotStepConfig = {
 	chartType: 'scatter';
-	data: ScatterPlotData;
+	data: ScatterPlotData<PulitzerScatterPoint>;
 	interactivePointRadius?: boolean;
 	vizOptions: ScatterPlotOptions;
 };
@@ -27,30 +32,37 @@ export type StoryStepConfig = StoryStepOptions & (ScatterPlotStepConfig | DotPlo
 
 export const load = (async () => {
 	const { ageCategories, dotPlotData } = getDotPlotData();
-	// const scatterPoisson200 = generateScatterplotData('poisson', 200);
-	// const scatterBates300 = generateScatterplotData('bates', 300);
-	// const scatterPoison100 = generateScatterplotData('poisson', 100);
 
 	const pulizterData = preparePulitzerData();
 
 	const pulitzerScatter2004 = pulizterData.map((d) => ({
 		x: d.daily_circulation_2004,
 		y: d.pulitzer_prize_winners_and_finalists_1990_2003,
-		newspaper: d.newspaper,
-		year: 2004
+		z: d.newspaper,
+		meta: { circulationYear: '2004', pulitzerPeriod: '1990 - 2003' }
 	}));
+
 	const pulitzerScatter2013 = pulizterData.map((d) => ({
 		x: d.daily_circulation_2013,
 		y: d.pulitzer_prize_winners_and_finalists_2004_2014,
-		newspaper: d.newspaper,
-		year: 2013
+		z: d.newspaper,
+		meta: { circulationYear: '2013', pulitzerPeriod: '2004 - 2014' }
 	}));
 	const maxCirculation = max([...pulitzerScatter2004, ...pulitzerScatter2013], (d) => d.x) || 0;
 	const maxWinners = max([...pulitzerScatter2004, ...pulitzerScatter2013], (d) => d.y) || 0;
 
+	const getTooltipContent = (point: PulitzerScatterPoint) =>
+		`<strong>${point.z}</strong><br>Daily Circulation (${
+			point.meta.circulationYear
+		}): <strong>${format('d')(point.x)}
+	</strong><br>Pulitzer Finalists (${point.meta.pulitzerPeriod}): <strong>${format('d')(
+			point.y
+		)}</strong>`;
+
 	const scatterPlotDefaultOptions: ScatterPlotOptions = {
 		xDomain: [0, maxCirculation],
-		yDomain: [0, maxWinners]
+		yDomain: [0, maxWinners],
+		getTooltipContent
 	};
 	const dotPlotDefaultOptions: DotPlotOptions = {
 		transitionDelay: 50
@@ -64,7 +76,7 @@ export const load = (async () => {
 				'Pulitzer Price Winners and Finalists <strong>1990 - 2003</strong><br>Daily Circulation <strong>2004</strong>',
 			chartType: 'scatter',
 			data: pulitzerScatter2004,
-			vizOptions: { ...scatterPlotDefaultOptions, pointRadius: 4 }
+			vizOptions: { ...scatterPlotDefaultOptions, pointRadius: 5 }
 		},
 		{
 			id: 'scatter2',
@@ -73,7 +85,7 @@ export const load = (async () => {
 				'Pulitzer Price Winners and Finalists <strong>2004 - 2013</strong><br>Daily Circulation <strong>2014</strong>',
 			chartType: 'scatter',
 			data: pulitzerScatter2013,
-			vizOptions: { ...scatterPlotDefaultOptions, pointRadius: 4 }
+			vizOptions: { ...scatterPlotDefaultOptions, pointRadius: 5, showGrid: true }
 		},
 		{
 			id: 'scatterZoom2',

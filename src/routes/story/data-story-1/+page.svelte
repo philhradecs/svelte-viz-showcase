@@ -5,7 +5,7 @@
 	import headerImage from '$assets/images/data-story-header.jpg';
 	import DataStorySection from '$components/data-story/DataStorySection.svelte';
 	import DataStoryWrapper from '$components/data-story/DataStoryWrapper.svelte';
-	import ScatterPlotSvelte from './ScatterPlotSvelte.svelte';
+	import ScatterPlotSvelte from './ScatterPlot.svelte';
 	import DotPlotChart from './DotPlotChart.svelte';
 	import type { StoryStepConfig } from './+page';
 

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Scrolly from '$components/scrolly/Scrolly.svelte';
-	import { fade } from 'svelte/transition';
 
 	let className: string = '';
 	export { className as class };
