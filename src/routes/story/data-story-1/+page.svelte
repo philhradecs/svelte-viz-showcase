@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { format } from 'd3-format';
 	import ChartAligner from '$components/data-story/ChartAligner.svelte';
 	import Chart from '$components/chart/ChartRoot.svelte';
 
@@ -7,12 +8,23 @@
 	import DataStoryWrapper from '$components/data-story/DataStoryWrapper.svelte';
 	import ScatterPlotSvelte from './ScatterPlot.svelte';
 	import DotPlotChart from './DotPlotChart.svelte';
-	import type { StoryStepConfig } from './+page';
+	import type { ChartStepConfig, PulitzerScatterPoint } from './+page.server';
+	import NavMenuSidebar from '$components/NavMenuSidebar.svelte';
 
 	export let data;
 
 	let activeStep: string | undefined;
-	let activeConfig: StoryStepConfig | undefined;
+	let activeConfig: ChartStepConfig | undefined;
+
+	const step = (id: (typeof data.stepsConfig)[number]['id']) => id;
+
+	const getScatterTooltipContent = (point: PulitzerScatterPoint) =>
+		`<strong>${point.z}</strong><br>Daily Circulation (${
+			point.meta.circulationYear
+		}): <strong>${format('d')(point.x)}
+	</strong><br>Pulitzer Finalists (${point.meta.pulitzerPeriod}): <strong>${format('d')(
+			point.y
+		)}</strong>`;
 
 	$: {
 		if (activeStep && activeStep !== activeConfig?.id) {
@@ -20,25 +32,16 @@
 		}
 	}
 
-	let pointRadiusInput: number;
+	let pointRadiusInput: number = 8;
 </script>
 
 <div class="mt-8 mb-8">
-	<div class="fixed left-4 top-[20%] z-30 hidden xl:block">
-		{#each data.stepsConfig as step (step.id)}
-			{#if !activeConfig?.fullSize}
-				<a
-					class="block mb-2 px-2 py-1 text-sm rounded-sm text-white"
-					href={`#${step.id}`}
-					class:font-bold={activeConfig?.id === step.id}
-					class:bg-cyan-900={activeConfig?.id === step.id}
-				>
-					{step.title}
-				</a>
-			{/if}
-		{/each}
-	</div>
 	<div class="container mx-auto max-w-4xl px-5 leading-relaxed md:text-lg">
+		<NavMenuSidebar
+			activeId={activeConfig?.id}
+			collapsed={!activeConfig?.fullSize}
+			steps={data.stepsConfig}
+		/>
 		<DataStoryWrapper bind:activeStep>
 			<div slot="chart">
 				{#if activeConfig?.chartType === 'scatter'}
@@ -53,15 +56,19 @@
 								</figcaption>
 							{/if}
 							<Chart
+								{data}
+								chart={ScatterPlotSvelte}
+								vizOptions={interactivePointRadius
+									? {
+											...vizOptions,
+											pointRadius: pointRadiusInput,
+											getTooltipContent: getScatterTooltipContent
+									  }
+									: vizOptions}
 								mt={20}
 								mr={40}
-								mb={30}
+								mb={50}
 								ml={40}
-								chart={ScatterPlotSvelte}
-								{data}
-								vizOptions={interactivePointRadius
-									? { ...vizOptions, pointRadius: pointRadiusInput }
-									: vizOptions}
 							/>
 						</figure>
 					</ChartAligner>
@@ -100,7 +107,7 @@
 				</div>
 			</DataStorySection>
 
-			<DataStorySection id="scatter1" class="mb-[40vh]">
+			<DataStorySection id={step('scatter1')} class="mb-[80vh]">
 				<h2>Section 1</h2>
 				The call was a hoarse, urgent whisper, and the youngster bounded to the open window. Slim wasn't
 				his real name, but the new friend he had met the day before had needed only one look at his slight
@@ -110,34 +117,7 @@
 				make their appearance.
 			</DataStorySection>
 
-			<DataStorySection id="scatter2" class="mb-[120vh]">
-				<!-- <div>
-					<h2>Section 2</h2>
-					Slim cried, "Hi, Red!" and waved cheerfully, still blinking the sleep out of himself. Red kept
-					to his croaking whisper, "Quiet! You want to wake somebody?" Slim noticed all at once that
-					the sun scarcely topped the low hills in the east, that the shadows were long and soft, and
-					that the grass was wet. Slim said, more softly, "What's the matter?"
-				</div> -->
-			</DataStorySection>
-			<DataStorySection id="scatterZoom2" class="mb-[80vh]">
-				<div>
-					<h2>Section 5</h2>
-					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
-					showcaseization components and a data-driven approach to DOM manipulation. powerful showcaseization
-					components and a data-driven approach to DOM manipulation. powerful showcaseization components
-					and a data-driven approach to DOM manipulation.
-				</div>
-			</DataStorySection>
-			<DataStorySection id="scatterZoom1" class="mb-[80vh]">
-				<div>
-					<h2>Section 5</h2>
-					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
-					showcaseization components and a data-driven approach to DOM manipulation. powerful showcaseization
-					components and a data-driven approach to DOM manipulation. powerful showcaseization components
-					and a data-driven approach to DOM manipulation.
-				</div>
-			</DataStorySection>
-			<DataStorySection id="scatter3" class="mb-[80vh]">
+			<DataStorySection id={step('scatter2')} class="mb-[80vh]">
 				<div>
 					<h2>Section 2</h2>
 					Slim cried, "Hi, Red!" and waved cheerfully, still blinking the sleep out of himself. Red kept
@@ -146,7 +126,25 @@
 					that the grass was wet. Slim said, more softly, "What's the matter?"
 				</div>
 			</DataStorySection>
-			<DataStorySection id="dotPlotAge1" class="mb-[120vh]">
+			<DataStorySection id={step('scatterZoom2')} class="mb-[80vh]">
+				<div>
+					<h2>Section 5</h2>
+					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
+					showcaseization components and a data-driven approach to DOM manipulation. powerful showcaseization
+					components and a data-driven approach to DOM manipulation. powerful showcaseization components
+					and a data-driven approach to DOM manipulation.
+				</div>
+			</DataStorySection>
+			<DataStorySection id={step('scatterZoom1')} class="mb-[80vh]">
+				<div>
+					<h2>Section 5</h2>
+					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
+					showcaseization components and a data-driven approach to DOM manipulation. powerful showcaseization
+					components and a data-driven approach to DOM manipulation. powerful showcaseization components
+					and a data-driven approach to DOM manipulation.
+				</div>
+			</DataStorySection>
+			<DataStorySection id={step('dotPlotAge1')} class="mb-[120vh]">
 				<div>
 					<h2>Section 3</h2>
 					Red only waved for him to come out. Slim dressed quickly, gladly confining his morning wash
@@ -156,7 +154,7 @@
 					'Come on in or you'll catch your death of cold.'"
 				</div>
 			</DataStorySection>
-			<DataStorySection id="dotPlotAge4" class="mb-[120vh]">
+			<DataStorySection id={step('dotPlotAge4')} class="mb-[120vh]">
 				<div>
 					<h2>Section 4</h2>
 					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
@@ -165,7 +163,7 @@
 					and a data-driven approach to DOM manipulation.
 				</div>
 			</DataStorySection>
-			<DataStorySection id="dotPlotAge6" class="mb-[120vh]">
+			<DataStorySection id={step('dotPlotAge6')} class="mb-[120vh]">
 				<div>
 					<h2>Section 4</h2>
 					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
@@ -174,23 +172,17 @@
 					and a data-driven approach to DOM manipulation.
 				</div>
 			</DataStorySection>
-			<DataStorySection id="scatter4" class="mb-[80vh]">
+			<DataStorySection id={step('scatter3')} class="mb-[80vh]">
 				<div>
 					<h2>Section 5</h2>
 					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
 					showcaseization components and a data-driven approach to DOM manipulation. powerful showcaseization
 					components and a data-driven approach to DOM manipulation. powerful showcaseization components
 					and a data-driven approach to DOM manipulation.
-					<input type="range" bind:value={pointRadiusInput} min={1} max={50} />
-				</div>
-			</DataStorySection>
-			<DataStorySection id="scatter5" class="mb-[80vh]">
-				<div>
-					<h2>Section 5</h2>
-					powerful showcaseization components and a data-driven approach to DOM manipulation. powerful
-					showcaseization components and a data-driven approach to DOM manipulation. powerful showcaseization
-					components and a data-driven approach to DOM manipulation. powerful showcaseization components
-					and a data-driven approach to DOM manipulation.
+					<label>
+						<input type="range" bind:value={pointRadiusInput} min={1} max={50} />
+						{pointRadiusInput}
+					</label>
 				</div>
 			</DataStorySection>
 

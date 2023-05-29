@@ -41,6 +41,7 @@
 </script>
 
 <Axis
+	label="Daily Circulation"
 	scale={xScale}
 	height={config.height}
 	width={config.width}
@@ -49,6 +50,7 @@
 	showGrid={config.showGrid}
 />
 <Axis
+	label="Pulitzer Finalists"
 	scale={yScale}
 	height={config.height}
 	width={config.width}
@@ -59,14 +61,13 @@
 
 {#each config.data as point (point.z)}
 	<circle
-		r={config.pointRadius}
+		r={1}
 		cx={0}
 		cy={0}
-		transform="translate({xScale(point.x)}, {yScale(point.y)})"
+		transform="translate({xScale(point.x)}, {yScale(point.y)}) scale({config.pointRadius || 1})"
 		class="transition-[transform] duration-700 ease-[cubicOut]"
 		fill={colorScale(point.z)}
-		fill-opacity="0.6"
-		stroke={colorScale(point.z)}
+		fill-opacity="0.8"
 		data-tippy-content={config.getTooltipContent ? config.getTooltipContent(point) : undefined}
 	/>
 {/each}
